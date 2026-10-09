@@ -1533,7 +1533,9 @@ addParts('aero', 'ae', [
   {name: 'Full Drag Aero Package', rating: 94, cda: .44, cla: .20, kg: 12, blurb: 'Long tail, covered wheels, minimum drag. Built for the top end of a long strip.'},
 ]);
 const FREE = {engine: 'en0', exhaust: 'ex0', gearbox: 'gb0', aero: 'ae0'};
-const reprice = budget => Object.values(PARTS).forEach(p => { p.price = p.free ? 0 : Math.round(budget * OPEN_SHARE[p.tier] / 50) * 50; });
+// exhausts open higher: 1,000 for the first tier, then 200 more per tier (1,000 to 2,000 at 10,000 credits); they follow the budget too
+const EXHAUST_SHARE = [0, .10, .12, .14, .16, .18, .20];
+const reprice = budget => Object.values(PARTS).forEach(p => { p.price = p.free ? 0 : Math.round(budget * (p.cat === 'exhaust' ? EXHAUST_SHARE : OPEN_SHARE)[p.tier] / 50) * 50; });
 reprice(10000);
 const TAGS = {
   en0: "It starts. That's the pitch.", en1: 'Small lungs, big heart.', en2: 'Four pots. One very angry snail.', en3: 'Six ways to say goodbye.', en4: 'Straight six. Crooked intentions.', en5: 'Eight cylinders of bad decisions.', en6: 'Twelve-part harmony. Zero mercy.',
@@ -2950,7 +2952,7 @@ function render() {
 let ruleI = 0, hostOpen = false, rdrag = null;
 const rules = () => [
   [fmt(S.budget) + ' credits', 'Your war chest.', 'Every team starts with the same budget. Spend it or lose it: nothing carries over to the race.'],
-  ['+50 / +100', 'How bids climb.', 'Each raise adds 50 credits until the price reaches 1,000, then 100 credits a time after that. Raise your hand to bid.'],
+  ['+50', 'How bids climb.', 'Every raise adds 50 credits. Raise your hand to bid.'],
   ['24', 'Parts. One of each.', 'Four categories, six parts in each. When the hammer drops, that part is gone for good.'],
   ['4', 'Free parts. No excuses.', 'Everyone gets a basic engine, exhaust, gearbox and body. Lose every bid and you still race.'],
   ['SOLD', 'Last paddle standing.', `Be the last paddle up and the part is yours at the price on the clock. No take-backs, no refunds, no sulking.`],
@@ -3082,8 +3084,8 @@ function auctionMinutes() {
 const capMin = () => Math.min(35, 14 + S.teams.length);
 function retune() { if (Object.keys(S.sales).length) return; for (S.raise = 10; S.raise < 40 && auctionMinutes() > capMin(); S.raise++); }
 // the smallest raise allowed on a bid, rounded up to the minimum step
-// every raise: 50 credits while the price is under 1,000, then 100 credits a time
-const raiseFor = bid => bid < 1000 ? 50 : 100;
+// every raise adds 50 credits
+const raiseFor = () => 50;
 // the next unsold lot in board order (category by category, cheapest first) after the one on the block
 const LOTS = () => CATS.flatMap(c => BYCAT[c.id].slice(1));
 function nextLot(id) { const L = LOTS(), i = L.findIndex(p => p.id === id); for (let k = 1; k <= L.length; k++) { const p = L[(i + k) % L.length]; if (!S.sales[p.id]) return p.id; } return null; }
