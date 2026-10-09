@@ -1518,7 +1518,7 @@ addParts('gearbox', 'gb', [
   {name: 'Basic 5-Speed Manual', rating: 40, gears: 5, shift: .45, eff: .84, launch: .88, miss: .06, kg: 48, art: {t: 'H', n: 5}, blurb: 'Long throws and wide ratios. Miss a shift and you lose time.'},
   {name: '5-Speed Manual', rating: 55, gears: 5, shift: .38, eff: .86, launch: .90, miss: .05, kg: 45, art: {t: 'H', n: 5}, blurb: 'A tighter gate and a lighter case.'},
   {name: '6-Speed Manual', rating: 64, gears: 6, shift: .34, eff: .87, launch: .90, miss: .05, kg: 48, art: {t: 'H', n: 6}, blurb: 'An extra ratio keeps the engine in its power band.'},
-  {name: '6-Speed Automatic', rating: 70, gears: 6, shift: .25, eff: .85, launch: .95, miss: 0, kg: 72, art: {t: 'A', n: 6}, blurb: 'Never misses a shift, launches cleanly, but saps some power.'},
+  {name: '6-Speed Automatic', rating: 70, gears: 6, shift: .22, eff: .86, launch: .95, miss: 0, kg: 72, art: {t: 'A', n: 6}, blurb: 'Never misses a shift, launches cleanly, but saps some power.'},
   {name: '8-Speed Automatic', rating: 80, gears: 8, shift: .16, eff: .88, launch: .96, miss: 0, kg: 82, art: {t: 'A', n: 8}, blurb: 'Eight close ratios and quick changes. Heavy.'},
   {name: '7-Speed Dual-Clutch Transmission', rating: 91, gears: 7, shift: .06, eff: .91, launch: 1, miss: 0, kg: 76, art: {t: 'D', n: 7}, blurb: 'Near-seamless shifts and perfect launches.'},
   {name: '6-Speed Sequential Gearbox', rating: 95, gears: 6, shift: .04, eff: .92, launch: .98, miss: .01, kg: 50, art: {t: 'S', n: 6}, blurb: 'Race-bred, brutal and light. The fastest shifts on the grid.'},
@@ -1530,7 +1530,7 @@ addParts('aero', 'ae', [
   {name: 'Rear Diffuser', rating: 72, cda: .58, cla: 1.30, kg: 7, blurb: 'Sucks the rear tyres into the strip. More traction as the speed builds.'},
   {name: 'Streamlined Body Kit', rating: 79, cda: .54, cla: .90, kg: 9, blurb: 'Reshaped panels that slip through the air.'},
   {name: 'Active Aero Package', rating: 92, cda: .50, cla: .60, cdaC: .80, claC: 3.20, kg: 14, blurb: 'Wing stands up while the tyres fight for grip, lies flat once they hook up, then doubles as an air brake.'},
-  {name: 'Full Drag Aero Package', rating: 94, cda: .44, cla: .20, kg: 12, blurb: 'Long tail, covered wheels, minimum drag. Built for the top end of the 400 m.'},
+  {name: 'Full Drag Aero Package', rating: 94, cda: .44, cla: .20, kg: 12, blurb: 'Long tail, covered wheels, minimum drag. Built for the top end of a long strip.'},
 ]);
 const FREE = {engine: 'en0', exhaust: 'ex0', gearbox: 'gb0', aero: 'ae0'};
 const reprice = budget => Object.values(PARTS).forEach(p => { p.price = p.free ? 0 : Math.round(budget * OPEN_SHARE[p.tier] / 50) * 50; });
@@ -1691,23 +1691,24 @@ ${o.stamp ? `<div class="lay stamp" style="--sc:${o.stamp}"><span>SOLD</span></d
 }
 const chip = p => `<span class="chip" style="--tc:${TIERS[p.tier].color}" title="${esc(p.name)}">${icon(p.cat)}${p.rating}</span>`;
 
-/* ================= physics: 400 m drag strip ================= */
+/* ================= physics: 904 m drag strip ================= */
 // SI units. A 1 ms time-stepped longitudinal model: engine torque curve through the gearbox, clutch-slip launch, tyre grip
 // with rearward load transfer and rear downforce, aero drag, rolling resistance, rotating inertia, torque cut while shifting,
 // then a shutdown after the finish (lift, parachute, brakes). Timing follows drag-racing practice: reaction time to the stage
-// beam, elapsed time from there, and trap speed averaged over the 20 m before the 200 m mark and before the finish.
+// beam, elapsed time from there, and trap speed averaged over the 20 m before the half-way mark and before the finish.
 // Every car runs in the same ideal conditions (same air, same track, same driver), so only the parts change a run.
 const G = 9.81, RHO = 1.204, CRR = .011, MU = 1.7, CHASSIS = 820, DRIVER = 75;
 const WB = 3.6, CG_H = .34, R_W = .36, I_W = 1.1, I_DL = .05, AERO_REAR = .58, LAUNCH_V = 14;
-const QM = 400, ROLLOUT = .3, DT = .001, KEEP = 10, CHUTE_V = 61, CHUTE_CDA = 2.6;
+const QM = 904, HALF = QM / 2, ROLLOUT = .3, DT = .001, KEEP = 10, CHUTE_V = 61, CHUTE_CDA = 2.6;
 const STEP_RATIO = {5: 1.38, 6: 1.32, 7: 1.27, 8: 1.23};
 // A drag race takes the driver out of it: every car has the same perfect driver, who lets go the instant the light turns
 // green, so R/T is only how quickly the car itself clears the stage beam. A gearbox that sometimes misses a shift pays its
 // average miss (0.3 s × its miss rate) on every change, the same for every car that runs it.
 const REACT = 0, MISS_T = .3;
-// beams from the start line: rollout, 60 ft (the classic launch split), 100 m, 180 m (half-way trap), 200 m, 300 m, 380 m (finish trap), 400 m
-const BEAMS = [['rt', ROLLOUT], ['b60', 18.288], ['b100', 100], ['b180', 180], ['b200', 200], ['b300', 300], ['b380', 380], ['fin', QM]];
-const STRIP = {id: 'drag', name: '400 m Drag', sub: '400 m drag strip', len: QM}, COLLAB_SIGN = 'E-CELL JNTUH × HEXAWATTS';
+// beams from the start line: rollout, 60 ft (the classic launch split), 100 m, the half-way trap (20 m before half-way), half-way,
+// three-quarters, the finish trap (20 m before the line), the finish. The b200/b300 names stand for half-way and three-quarters.
+const BEAMS = [['rt', ROLLOUT], ['b60', 18.288], ['b100', 100], ['b180', HALF - 20], ['b200', HALF], ['b300', QM * .75], ['b380', QM - 20], ['fin', QM]];
+const STRIP = {id: 'drag', name: QM + ' m Drag', sub: QM + ' m drag strip', len: QM}, COLLAB_SIGN = 'E-CELL JNTUH × HEXAWATTS';
 // torque relative to the torque at peak power, against x = rpm / peak-power rpm. Naturally aspirated: 1 + x − x², so power
 // peaks at x = 1. Turbo: soft off boost below ~30 %, a flat boost plateau through the mid-range, falling into the same peak.
 const torq = (x, turbo) => turbo ? (.62 + .38 * clamp((x - .28) / .22)) * Math.min(1.3, 2 - x) : 1 + x - x * x;
@@ -1786,7 +1787,7 @@ function simulate(sp, o) {
     const xp = x, tp = t; v = Math.max(0, v + a * dt); x += v * dt; t += dt;
     while (bi < BEAMS.length && x >= BEAMS[bi][1]) {
       const [k, d] = BEAMS[bi++]; hit[k] = tp + (d - xp) / Math.max(1e-9, x - xp) * dt;
-      if (k === 'fin' && (QM - 380) / (hit.fin - hit.b380) >= CHUTE_V) chute = hit.fin + .45;
+      if (k === 'fin' && 20 / (hit.fin - hit.b380) >= CHUTE_V) chute = hit.fin + .45;
     }
     if (!t100 && v >= 27.778) t100 = t - go;
     if (hit.fin == null) top = Math.max(top, v);
@@ -1795,7 +1796,7 @@ function simulate(sp, o) {
   const rt = hit.rt, F32 = q => Float32Array.from(q);
   return {t0, dt: dt * kp, n: X.length, X: F32(X), V: F32(V), A: F32(A), RPM: F32(RPM), GR: Uint8Array.from(GR), FL: Uint8Array.from(FL),
     go, rt, et: hit.fin - rt, time: hit.fin, t60: hit.b60 - rt, t100m: hit.b100 - rt, t200: hit.b200 - rt, v200: 20 / (hit.b200 - hit.b180),
-    t300: hit.b300 - rt, trap: (QM - 380) / (hit.fin - hit.b380), top, t100, chute};
+    t300: hit.b300 - rt, trap: 20 / (hit.fin - hit.b380), top, t100, chute};
 }
 const RUNS = new Map();
 const runFor = sp => { if (!RUNS.has(sp.key)) RUNS.set(sp.key, simulate(sp)); return RUNS.get(sp.key); };
@@ -2280,7 +2281,7 @@ function bwWheel(M) {
   return g;
 }
 /* ---- the drag strip at night: real-size cars, one lane each, timing tree, scoreboard, shutdown area ---- */
-const LW = 5.2, NOSE = 3.05, RUN = QM + 560, TREE_X = 7;
+const LW = 5.2, NOSE = 3.05, RUN = QM + 760, TREE_X = 7;
 // start lights, seconds into the sequence. Race night: five reds a second apart, then after a hold nobody can time (1 to 2.5 s)
 // all five turn green together, 6 to 7.5 s in. A team's test run in the garage: a quick 0.4 s sequence, green at 2.4 s.
 let LIGHT_GAP = 1, TREE_GO = 6.5;
@@ -2344,7 +2345,7 @@ function race3(race) {
   const barT = ctex(128, 32, c => { c.fillStyle = '#e9e1d2'; c.fillRect(0, 0, 128, 32); c.fillStyle = '#c9352b'; c.fillRect(0, 6, 128, 7); c.fillStyle = '#2f6f96'; c.fillRect(0, 15, 128, 5); c.fillStyle = '#17171a'; c.fillRect(0, 0, 128, 3); c.fillRect(126, 0, 2, 32); }, SL / 6);   // poster stripes: cream wall, red and steel bands
   const wallM = std({map: barT, roughness: .7, metalness: .05, envMapIntensity: .3});
   [-1, 1].forEach(sd => { add(new T.BoxGeometry(SL, 1.05, .5), wallM, scx, .52, sd * (hw + 1.4)).receiveShadow = true; });
-  [[100, '100 M'], [200, '200 M'], [300, '300 M']].forEach(([x, t]) => [-1, 1].forEach(sd => {
+  [200, 400, 600, 800].filter(x => x < QM - 40).map(x => [x, x + ' M']).forEach(([x, t]) => [-1, 1].forEach(sd => {
     sign(t, 5.2, 1.3, x, 2.55, sd * (hw + 1.75), sd > 0 ? Math.PI : 0); [-2.2, 2.2].forEach(o => add(new T.BoxGeometry(.14, 2.2, .14), pole, x + o, 1.1, sd * (hw + 1.85)));
   }));
   const beamT = ctex(4, 128, (c, w, h) => { const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(.5, 'rgba(255,255,255,.25)'); g.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); });
@@ -2355,7 +2356,7 @@ function race3(race) {
   });
   [[8, 4], [QM - 6, -4]].forEach(([x, z]) => { const L = new T.PointLight(0xe8ecff, 1.4, 120, 1.5); L.position.set(x, 14, z); W.add(L); });
   // overhead banners at the start and the finish, a face each way
-  [[-3, ttl, COLLAB_SIGN], [QM + 22, 'FINISH', '400 M DRAG']].forEach(([x, a, b]) => {
+  [[-3, ttl, COLLAB_SIGN], [QM + 22, 'FINISH', QM + ' M DRAG']].forEach(([x, a, b]) => {
     [-1, 1].forEach(sd => add(new T.BoxGeometry(.7, 9, .7), pole, x, 4.5, sd * (hw + 2.2)));
     add(new T.BoxGeometry(.6, 1.3, 2 * hw + 5), roofM, x, 8.4, 0);
     sign(a, 2 * hw + 4, 2.1, x - .32, 8.4, 0, -Math.PI / 2); sign(b, 2 * hw + 4, 2.1, x + .32, 8.4, 0, Math.PI / 2);
@@ -2385,6 +2386,7 @@ function race3(race) {
     if (roof) { add(new T.BoxGeometry(len, .35, tiers * 2.8 + 2), roofM, cx, tiers * 1.5 + 2.2, z0 + sd * (tiers - 1) * 1.3); for (let x = xa; x <= xa + len; x += 24) { add(new T.CylinderGeometry(.22, .22, tiers * 1.5 + 2.2, 8), roofM, x, (tiers * 1.5 + 2.2) / 2, z0 + sd * tiers * 2.6); glow(x, tiers * 1.5 + 1.8, z0 - sd * .6, 4, 0xffffff); } }
   };
   stand(-80, 216, 6, true, -1, 14); stand(QM - 150, 140, 4, false, -1, 14); stand(10, 190, 5, true, 1, 16);
+  stand(150, QM - 310, 4, false, -1, 14); stand(220, QM - 200, 5, true, 1, 16);   // the long middle of the strip is lined too
   { const x = -24, z = hw + 20; add(new T.BoxGeometry(26, 10, 9), roofM, x, 5, z); add(new T.BoxGeometry(26.2, 2.2, 9.2), basic({color: 0xcfe2ff}), x, 7.6, z); sign(COLLAB_SIGN, 20, 4.4, x, 3.4, z - 4.56, Math.PI); glow(x, 10.6, z, 5, 0xe8483b); }
   [[230, ttl], [300, COLLAB_SIGN], [QM + 60, 'BID · BUILD · RACE']].forEach(([x, t]) => {
     sign(t, 22, 5.5, x, 9, hw + 18, Math.PI); add(new T.BoxGeometry(23, 6.4, .5), roofM, x, 9, hw + 18.3); [-9, 9].forEach(o => add(new T.BoxGeometry(.5, 6, .5), pole, x + o, 3, hw + 18.4));
@@ -2467,7 +2469,7 @@ function mergeStatic(W) {
 function drawScore(v, race, all) {
   const c = v.sbX, W = 1024, H = 512, n = race.cars.length, rh = Math.min(62, (H - 108) / n), done = race.cars.filter(k => k.res && (all || k.fin)).sort((a, b) => a.res.time - b.res.time);
   c.fillStyle = '#050505'; c.fillRect(0, 0, W, H); c.fillStyle = '#e23a2e'; c.fillRect(0, 0, W, 8); c.fillStyle = '#3a7aa3'; c.fillRect(0, H - 8, W, 8);
-  c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = '400 46px Anton, Impact, sans-serif'; c.fillText('400 M DRAG', 30, 54);
+  c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = '400 46px Anton, Impact, sans-serif'; c.fillText(QM + ' M DRAG', 30, 54);
   c.textAlign = 'right'; c.fillStyle = '#8d8d8d'; c.font = '600 22px "JetBrains Mono", monospace'; c.fillText('R/T', 650, 58); c.fillText('E.T.', 830, 58); c.fillText('KM/H', 996, 58);
   race.cars.forEach((k, i) => {
     const y = 108 + (i + .5) * rh, f = done.includes(k);
@@ -2989,7 +2991,7 @@ function viewSetup() {
 <li><div><b>Auction.</b> Put a card on the block and raise the price with + while paddles are up. Tap the last team standing, then hit Sold. One unit of each of the 24 parts.</div></li>
 <li><div><b>Packages.</b> Send every team their crate: a file or link holding the 3D cards they won plus the four free parts.</div></li>
 <li><div><b>Build.</b> Teams open the crate, fit one part per slot, name the car and send back a build code.</div></li>
-<li><div><b>Race.</b> Builds land in the Race tab. Start the lights and run them down the 400 m strip. Several laptops? Combine their result codes in the Race tab.</div></li></ol></div></div></details>`;
+<li><div><b>Race.</b> Builds land in the Race tab. Start the lights and run them down the ${QM} m strip. Several laptops? Combine their result codes in the Race tab.</div></li></ol></div></div></details>`;
   return `<div class="brief">
 <div class="bhero"><div class="bscene">${v3slot('loop', {kind: 'loop', cuts: true, every: 2.6}, () => '')}</div><div class="bfx">${'<i></i>'.repeat(6)}</div>
 <div class="bnav"><span class="lbl">${LOGO}Driver briefing</span>${COLLAB(24)}</div>
@@ -3184,7 +3186,7 @@ function entries() {
 // Every car runs in identical conditions, so a time set on one laptop compares directly with a time set on another (as long
 // as both run this same version: PHYS changes whenever the physics does). Ranked by time to the line; an equal time goes to the
 // car with more horsepower; identical cars share the place.
-const PHYS = 'drag-3';
+const PHYS = 'drag-904';
 // one row of a result, rounded the same way whether it is this laptop's or arrives in a code, so equal cars compare equal
 const resRow = r => ({n: r.name, c: r.car, col: r.color, em: r.em, t: +r.time.toFixed(4), et: +r.et.toFixed(4), trap: +r.trap.toFixed(2), hp: Math.round(r.hp != null ? r.hp : carSpec(r.build).hp)});
 const resultCode = () => 'AGPR1.' + enc({v: 1, phys: PHYS, id: S.id, title: S.title, group: grpName(), rows: S.last.rows.map(resRow)});
@@ -3220,7 +3222,7 @@ function viewRace() {
   const grid = es.map(e => `<div class="ge" style="--c:${e.team.color}">${badge(e.team, 24)}<b>${esc(e.team.name)}</b><span class="status ${st[e.status][0]}">${st[e.status][1]}</span><small>${e.spec ? Math.round(e.spec.hp) + ' hp · ' + Math.round(e.spec.mass) + ' kg' : 'not racing'}</small></div>`).join('');
   return `<section class="rhero"><div class="stage"><canvas id="rc"></canvas><div class="lights" id="lights">${TREE_HTML}</div></div><div class="rhv"></div>
 <div class="rhc"><div class="eyebrow">E-Cell JNTUH × Hexawatts · ${esc(S.title || 'Grand Bid Prix')} · ${STRIP.name}</div><h1 class="mega glt"><span>The</span><em data-w="Race">Race</em></h1>
-<p class="rhl">${grpName() ? esc(grpName()) + ' · ' : ''}400 m drag strip · ${onGrid} car${onGrid === 1 ? '' : 's'} on the line · ${got} build${got === 1 ? '' : 's'} received</p>
+<p class="rhl">${grpName() ? esc(grpName()) + ' · ' : ''}${QM} m drag strip · ${onGrid} car${onGrid === 1 ? '' : 's'} on the line · ${got} build${got === 1 ? '' : 's'} received</p>
 <div class="rhb"><button class="in-btn go" data-act="start"><span>Start the race</span><b><i>›</i><i>›</i><i>›</i></b></button><a class="rhmore" href="#rgrid">Line-up &amp; builds ↓</a></div></div>
 <div class="clock" id="clock" hidden>0.000</div></section>
 <div class="rpanels" id="rgrid">
@@ -3303,7 +3305,7 @@ function stepRace(dt, withReplay) {
     const rk = order(), w = rk[0], s2 = rk[1], away = [...rk].sort((a, b) => a.res.rt - b.res.rt)[0], half = [...rk].sort((a, b) => (a.res.rt + a.res.t200) - (b.res.rt + b.res.t200))[0], at200 = half.res.rt + half.res.t200;
     race.rps = [
       {from: -.3, to: 2.2, speed: .3, shot: 'rlaunch', big: 'Replay · the launch', small: `${away.team.name} first away · R/T ${away.res.rt.toFixed(3)} s`},
-      {from: at200 - 1.4, to: at200 + .8, speed: .45, shot: 'track', big: 'Replay · half-way', small: `${half.team.name} leads at 200 m · ${Math.round(half.res.v200 * 3.6)} km/h`},
+      {from: at200 - 1.4, to: at200 + .8, speed: .45, shot: 'track', big: 'Replay · half-way', small: `${half.team.name} leads at ${HALF} m · ${Math.round(half.res.v200 * 3.6)} km/h`},
       {from: w.res.time - .9, to: w.res.time + Math.min(1.4, s2 ? s2.res.time - w.res.time + .5 : .9), speed: .28, shot: 'replay', big: 'Replay · ' + w.team.name, small: s2 ? 'Wins by ' + (s2.res.time - w.res.time).toFixed(3) + ' s' : w.res.et.toFixed(3) + ' s'}];
     race.rpi = 0; race.state = 'replay'; race.t = race.rps[0].from; playSpeed = race.rps[0].speed;
     return 'replay';
@@ -3410,7 +3412,7 @@ function cineFrame(now) {
   if (race.state === 'open') {
     const dt = Math.min(.1, (now - race.last) / 1000); race.last = now; race.ot += dt;
     const op = $('#copen');
-    if (op && !op.innerHTML) { op.innerHTML = `<div class="cop">${COLLAB(40)}<small>present</small><b>${ttl}</b><em>${grpName() ? esc(grpName()) : 'Race night'} · ${cars.length} cars · 400 m drag</em></div>`; requestAnimationFrame(() => op.classList.add('show')); SFX.whoosh(); }
+    if (op && !op.innerHTML) { op.innerHTML = `<div class="cop">${COLLAB(40)}<small>present</small><b>${ttl}</b><em>${grpName() ? esc(grpName()) : 'Race night'} · ${cars.length} cars · ${QM} m drag</em></div>`; requestAnimationFrame(() => op.classList.add('show')); SFX.whoosh(); }
     if (race.ot >= race.od) { race.state = 'walk'; race.wt = 0; race.last = now; if (op) op.classList.remove('show'); }
     if (now - cine.crowd > 4500) { cine.crowd = now; SFX.crowd(); }
     return;
@@ -3430,7 +3432,7 @@ function cineFrame(now) {
     const rk = ranked(), L = rk[0], run = cars.filter(c => !c.fin), F = run.length ? run.reduce((a, c) => c.pos > a.pos ? c : a) : L, rp = race.state === 'replay';
     const set = (id, val) => { const e = cine.el[id] || (cine.el[id] = $('#' + id)), t = String(val); if (e && e.textContent !== t) e.textContent = t; };
     set('cclock', rp ? 'Replay' : (race.state === 'run' ? Math.max(0, race.t) : order()[cars.length - 1].res.time).toFixed(3));
-    set('clapc', rp ? 'Slow-motion replay' : race.state === 'done' ? '400 m · all across' : `${Math.round(Math.min(QM, F.pos))} / 400 m`);
+    set('clapc', rp ? 'Slow-motion replay' : race.state === 'done' ? QM + ' m · all across' : `${Math.round(Math.min(QM, F.pos))} / ${QM} m`);
     if (F) { set('cspd', Math.round(F.v * 3.6)); set('cgear', F.fin ? 'FIN' : F.gear); set('cwho', F.team.name); const fast = !rp && F.v > 58; if (cine.fast !== fast) { cine.fast = fast; $('#cine').classList.toggle('fast', fast); } }
     if (race.state === 'run') {
       if (L && !L.fin && cine.lead && cine.lead !== L.team.id && race.t > 1.2) cineBanner('P1 · ' + L.team.name, 'Takes the lead', 'lead');
@@ -3503,7 +3505,7 @@ function cineSplits() {
   const rk = order(), el = $('#csplits'), lo = k => Math.min(...rk.map(c => c.res[k])), hi = k => Math.max(...rk.map(c => c.res[k]));
   const cell = (c, k, up) => { const v = c.res[k], b = up ? hi(k) : lo(k), w = up ? v / b : b / v; return `<span class="cspc${v === b ? ' best' : ''}"><i style="--w:${(w * 100).toFixed(1)}%"></i><b>${up ? Math.round(v * 3.6) + ' km/h' : v.toFixed(3)}</b></span>`; };
   el.innerHTML = `<div class="csp"><div class="csph"><small>${esc(S.title || 'Grand Bid Prix')}${grpName() ? ' · ' + esc(grpName()) : ''} · the splits</small><b>Where it was won</b></div>
-<div class="csprow csphead"><span></span><span>60 ft</span><span>200 m</span><span>E.T.</span><span>Trap</span></div>
+<div class="csprow csphead"><span></span><span>60 ft</span><span>${HALF} m</span><span>E.T.</span><span>Trap</span></div>
 ${rk.map((c, i) => `<div class="csprow" style="--c:${c.color};--i:${i}"><span class="cspn">${badge(c.team, 22)}<em>${esc(clip(c.team.name, 18))}</em></span>${cell(c, 't60')}${cell(c, 't200')}${cell(c, 'et')}${cell(c, 'trap', true)}</div>`).join('')}</div>`;
   cine.splits = 1; requestAnimationFrame(() => el.classList.add('show')); SFX.whoosh(); cine.splitT = setTimeout(cineFinish, 8000);
 }
@@ -3515,7 +3517,7 @@ function cineFinish() {
 <div class="crinfo"><b>${esc(c.team.name)}</b><small>${c.name !== c.team.name ? esc(c.name) + ' · ' : ''}R/T ${c.res.rt.toFixed(3)} · 60 ft ${c.res.t60.toFixed(3)} · ${Math.round(c.res.trap * 3.6)} km/h</small></div>
 <div class="crpts"><b>${c.res.et.toFixed(3)}<i>s</i></b><small>${pos[i] === 1 ? (rk[1] && tied(rk[0], rk[1]) ? 'Dead heat' : hole ? 'Holeshot win' : 'Winner') : (pos[i] === pos[i - 1] || pos[i] === pos[i + 1] ? 'Tie · ' : '') + '+' + (c.res.time - w.res.time).toFixed(3) + ' s at the line'}</small></div>
 <div class="crwm">${badge(c.team, 220)}</div><div class="crcar">${side[race.cars.indexOf(c)] ? `<img src="${side[race.cars.indexOf(c)]}" alt="">` : `<div class="crsil">${carSVG(c.build, c.color)}</div>`}</div></div>`;
-  const html = `<div class="cres"><div class="crhead"><h1 class="crt"><span style="--i:0">Time</span><span class="r" style="--i:1">slips</span></h1><div class="crsub">${rk.length} cars · ${grpName() ? esc(grpName()) + ' · ' : ''}400 m · ${title} · E-Cell JNTUH × Hexawatts</div><div class="crbar"><u></u></div></div>
+  const html = `<div class="cres"><div class="crhead"><h1 class="crt"><span style="--i:0">Time</span><span class="r" style="--i:1">slips</span></h1><div class="crsub">${rk.length} cars · ${grpName() ? esc(grpName()) + ' · ' : ''}${QM} m · ${title} · E-Cell JNTUH × Hexawatts</div><div class="crbar"><u></u></div></div>
 <div class="crrows">${rk.map(row).join('')}</div>
 <button class="in-btn go" data-act="cineClose" style="--i:${rk.length}"><span>Back to the pit wall</span><b><i>›</i><i>›</i><i>›</i></b></button></div>`;
   wipe(() => { if (!cineOn()) return; bgm('finale'); $('#csplits').classList.remove('show'); $('#cfin').innerHTML = html; $('#cfin').classList.add('show'); $('#cine').classList.add('ended'); fireworks([w.color, '#f3ece0', '#e23a2e', '#a8d0e2', '#3a7aa3'], 30, 3); });
@@ -3553,13 +3555,13 @@ const teamCell = (color, name, car, em) => `<div class="tn">${em == null ? `<spa
 function finishRace() {
   const rk = order();
   S.last = {track: 'drag', rows: rk.map(c => ({id: c.team.id, hp: c.spec.hp, name: c.team.name, color: c.color, em: c.team.em, car: c.name, time: c.res.time, rt: c.res.rt, et: c.res.et, t60: c.res.t60, t200: c.res.t200, v200: c.res.v200, trap: c.res.trap, top: c.res.top, t100: c.res.t100, build: c.build}))};
-  save(); drawBoard(); const cb = $('#combo-board'); if (cb) cb.innerHTML = comboHTML(); SFX.fanfare(); if (!cineOn()) { confetti(rk[0].color); toast(`${rk[0].team.name} wins the 400 m!`); }
+  save(); drawBoard(); const cb = $('#combo-board'); if (cb) cb.innerHTML = comboHTML(); SFX.fanfare(); if (!cineOn()) { confetti(rk[0].color); toast(`${rk[0].team.name} wins the ${QM} m!`); }
 }
 function resultsHTML(last) {
   const w = last && last.rows && last.rows[0]; if (!w || last.track !== 'drag' || w.et == null) return '';
   const P = []; last.rows.forEach((r, i) => { const q = last.rows[i - 1]; P[i] = q && Math.round(q.time * 1000) === Math.round(r.time * 1000) && Math.round(q.hp || 0) === Math.round(r.hp || 0) ? P[i - 1] : i + 1; });
-  return `<div class="winner"><span class="cup">P1</span><div><small>Winner · 400 m drag</small><b>${esc(w.name)}</b>${w.car !== w.name ? ' · ' + esc(w.car) : ''}</div><div style="margin-left:auto;font-weight:700;font-size:24px">${w.et.toFixed(3)} s · ${Math.round(w.trap * 3.6)} km/h</div></div>
-<table class="lb"><tr><th>#</th><th>Team</th><th>E.T.</th><th>Trap</th><th>R/T</th><th>60 ft</th><th>200 m</th><th>0–100</th><th>Margin</th><th>Build</th></tr>${last.rows.map((r, i) => `<tr class="p${P[i]}"><td class="pos">${P[i]}</td><td>${teamCell(r.color, r.name, r.car, r.em)}</td><td><b>${r.et.toFixed(3)} s</b></td><td>${Math.round(r.trap * 3.6)} km/h</td><td>${r.rt.toFixed(3)}</td><td>${r.t60.toFixed(3)}</td><td>${(r.t200 != null ? r.t200 : r.t660) != null ? (r.t200 != null ? r.t200 : r.t660).toFixed(3) + ' @ ' + Math.round((r.v200 != null ? r.v200 : r.v660) * 3.6) : '—'}</td><td>${r.t100 ? r.t100.toFixed(2) + ' s' : '—'}</td><td>${i ? '+' + (r.time - w.time).toFixed(3) : '—'}</td><td>${CATS.map(c => chip(PARTS[r.build[c.id]])).join(' ')}</td></tr>`).join('')}</table>`;
+  return `<div class="winner"><span class="cup">P1</span><div><small>Winner · ${QM} m drag</small><b>${esc(w.name)}</b>${w.car !== w.name ? ' · ' + esc(w.car) : ''}</div><div style="margin-left:auto;font-weight:700;font-size:24px">${w.et.toFixed(3)} s · ${Math.round(w.trap * 3.6)} km/h</div></div>
+<table class="lb"><tr><th>#</th><th>Team</th><th>E.T.</th><th>Trap</th><th>R/T</th><th>60 ft</th><th>${HALF} m</th><th>0–100</th><th>Margin</th><th>Build</th></tr>${last.rows.map((r, i) => `<tr class="p${P[i]}"><td class="pos">${P[i]}</td><td>${teamCell(r.color, r.name, r.car, r.em)}</td><td><b>${r.et.toFixed(3)} s</b></td><td>${Math.round(r.trap * 3.6)} km/h</td><td>${r.rt.toFixed(3)}</td><td>${r.t60.toFixed(3)}</td><td>${(r.t200 != null ? r.t200 : r.t660) != null ? (r.t200 != null ? r.t200 : r.t660).toFixed(3) + ' @ ' + Math.round((r.v200 != null ? r.v200 : r.v660) * 3.6) : '—'}</td><td>${r.t100 ? r.t100.toFixed(2) + ' s' : '—'}</td><td>${i ? '+' + (r.time - w.time).toFixed(3) : '—'}</td><td>${CATS.map(c => chip(PARTS[r.build[c.id]])).join(' ')}</td></tr>`).join('')}</table>`;
 }
 function drawBoard() {
   const el = $('#board'); if (!el || !race) return;
@@ -3585,12 +3587,12 @@ function drawRace() {
   c.font = '600 12px "Chakra Petch", system-ui, sans-serif'; c.textBaseline = 'middle';
   drawLanes(c, w, h);
 }
-// flat fallback when WebGL is unavailable: one lane per car, the 400 m left to right
+// flat fallback when WebGL is unavailable: one lane per car, the strip left to right
 function drawLanes(c, w, h) {
   const cars = race.cars, n = Math.max(1, cars.length), x0 = Math.min(160, w * .24), x1 = w - 48, top = 34, lh = (h - top - 14) / n, H = n * lh + 8;
   c.fillStyle = '#0c1620'; rr(c, x0 - 34, top - 4, x1 - x0 + 68, H, 10); c.fill();
   c.textAlign = 'center';
-  for (let d = 0; d <= QM; d += 100) { const x = x0 + d / QM * (x1 - x0); c.fillStyle = '#ffffff14'; c.fillRect(x, top - 4, 1, H); c.fillStyle = '#8a94aa'; c.fillText(d + ' m', x, 16); }
+  for (let d = 0; d <= QM; d += 200) { const x = x0 + d / QM * (x1 - x0); c.fillStyle = '#ffffff14'; c.fillRect(x, top - 4, 1, H); c.fillStyle = '#8a94aa'; c.fillText(d + ' m', x, 16); }
   for (let k = 0; k * 6 < H; k++) for (let j = 0; j < 2; j++) { c.fillStyle = (k + j) % 2 ? '#fff' : '#111'; c.fillRect(x1 + j * 6, top - 4 + k * 6, 6, Math.min(6, H - k * 6)); }
   c.fillStyle = '#ffffffaa'; c.fillRect(x0 - 1, top - 4, 2, H);
   cars.forEach((car, i) => {
@@ -3714,7 +3716,7 @@ function revealSeq() {
   };
   setTimeout(step, 600);
 }
-/* shakedown: the team car against a ghost running the four standard parts, side by side down the 400 m */
+/* shakedown: the team car against a ghost running the four standard parts, side by side down the strip */
 function shakedown() {
   const ghost = {id: 'ghost', name: 'Stock ghost', color: '#8d8d8d', em: 5}, me = {id: PKG.team.id, name: GS.car.trim() || PKG.team.name, color: livery(), em: PKG.team.em};
   const stock = Object.assign({}, FREE), mk = (t, build) => newCar({team: t, car: t.name, liv: t.color, build, spec: carSpec(build)});
@@ -3740,7 +3742,7 @@ function tickShk(now) {
     if (race.state === 'run' && now - race.lb > 150) { race.lb = now; const gap = me.pos - g.pos; $('#board').innerHTML = `<p>${me.fin ? 'Across the line.' : Math.round(me.v * 3.6) + ' km/h · gear ' + me.gear} <b class="${gap >= 0 ? 'good' : 'bad'}">${gap >= 0 ? '+' : '−'}${Math.abs(gap).toFixed(1)} m</b> ${gap >= 0 ? 'ahead of' : 'behind'} the ghost</p>`; }
     if (ev === 'finished') {
       const r = me.res, d = g.res.time - r.time;
-      $('#board').innerHTML = `<div class="shkres"><div><small>${esc(me.name)} · E.T.</small><b>${r.et.toFixed(3)} s</b></div><div><small>Trap speed</small><b>${Math.round(r.trap * 3.6)} km/h</b></div><div class="${d >= 0 ? 'good' : 'bad'}"><small>${d >= 0 ? 'Ahead of the ghost by' : 'Behind the ghost by'}</small><b>${Math.abs(d).toFixed(3)} s</b></div></div><p>R/T ${r.rt.toFixed(3)} · 60 ft ${r.t60.toFixed(3)} · 200 m ${r.t200.toFixed(3)} @ ${Math.round(r.v200 * 3.6)} km/h · 0–100 ${r.t100.toFixed(2)} s · the ghost ran ${g.res.et.toFixed(3)} s. ${d > 3 ? 'That is a proper gap. Lock it in before someone talks you out of it.' : d > 0 ? 'Ahead, but not by much. Another part might do it.' : 'Slower than standard. The mechanic is not angry, just disappointed.'}</p>`;
+      $('#board').innerHTML = `<div class="shkres"><div><small>${esc(me.name)} · E.T.</small><b>${r.et.toFixed(3)} s</b></div><div><small>Trap speed</small><b>${Math.round(r.trap * 3.6)} km/h</b></div><div class="${d >= 0 ? 'good' : 'bad'}"><small>${d >= 0 ? 'Ahead of the ghost by' : 'Behind the ghost by'}</small><b>${Math.abs(d).toFixed(3)} s</b></div></div><p>R/T ${r.rt.toFixed(3)} · 60 ft ${r.t60.toFixed(3)} · ${HALF} m ${r.t200.toFixed(3)} @ ${Math.round(r.v200 * 3.6)} km/h · 0–100 ${r.t100.toFixed(2)} s · the ghost ran ${g.res.et.toFixed(3)} s. ${d > 3 ? 'That is a proper gap. Lock it in before someone talks you out of it.' : d > 0 ? 'Ahead, but not by much. Another part might do it.' : 'Slower than standard. The mechanic is not angry, just disappointed.'}</p>`;
       if (d > 0) { SFX.fanfare(); confetti(me.color); }
     }
   }
