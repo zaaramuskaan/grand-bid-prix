@@ -25,7 +25,9 @@ h1,h2,h3,p{margin:0}
 .hexa{display:inline-block;width:auto;vertical-align:middle;flex:none}
 .collab{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .collab i{font-style:normal;opacity:.55;margin:0 1px}
-.brand small .collab{gap:5px;margin-top:3px}
+.brand small .collab{gap:7px;margin-top:5px}
+.brand small .collab i{font-size:15px;opacity:.7}
+@media(max-width:640px){.brand small .collab .hexa{height:20px!important}.brand small .collab{gap:5px;margin-top:3px}}
 .lcol{font-size:inherit;letter-spacing:inherit}
 .lgs{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 12px;width:100%}
 .back.cover .lgs .llogo,.hxt{width:min(38%,170px);aspect-ratio:1;margin:0;border-radius:4px}
@@ -58,7 +60,6 @@ svg.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;str
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .field{display:flex;flex-direction:column;gap:6px}
 .field span{color:var(--mut);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.aest{display:block;padding:9px 0;font-size:18px;color:var(--acc2)}
 .inp{background:#0a1219;border:1px solid var(--line);border-radius:9px;padding:9px 12px;width:100%;outline:none}
 .inp:focus{border-color:var(--acc)}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:2px 7px 2px 5px;border-radius:7px;font-size:12px;font-weight:700;color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 45%,transparent);background:color-mix(in srgb,var(--tc) 10%,transparent)}
@@ -200,6 +201,17 @@ svg.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;str
 .bidteams button.lead{outline:2px solid var(--acc2)}
 .bidteams b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bidteams small{color:var(--mut)}
+.bidteams{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.bteam{display:flex;gap:4px;min-width:0}
+/* Undo, Next and Sold stay on screen however long the team list runs */
+.blk-panel .blk-actions{position:sticky;bottom:0;z-index:4;background:#050505;padding:10px 0;box-shadow:0 -12px 16px -12px #000}
+/* phones: the price box wraps (price and timer, then the next step); the block scrolls as one column, so nothing is pinned */
+@media(max-width:640px){.blk-panel .blk-actions{position:static;box-shadow:none;padding:0}.bidbox{flex-wrap:wrap;gap:10px}.bidbox>div:last-child{margin-left:0!important;text-align:left!important;flex-basis:100%}.ltimer{margin-left:auto}}
+.bteam>button:first-child{flex:1;min-width:0}
+.bidteams .bplus{flex:none;width:60px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-left:1px solid var(--line);font-size:24px;font-weight:700;line-height:1;text-align:center}
+.bidteams .bplus small{font-size:10px;font-weight:600;letter-spacing:.02em}
+.songrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0}
+.songrow b{font-size:13px;font-weight:600;color:var(--acc2);min-width:0;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ltimer{align-self:flex-start;margin-left:14px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--txt);font:600 18px/1 var(--mono);letter-spacing:.04em;min-width:64px}
 .ltimer.low{color:#ff6b5e;border-color:#ff6b5e}
 .ltimer.up{color:#fff;background:var(--acc);border-color:var(--acc);animation:tpulse .8s ease-in-out infinite alternate}
@@ -954,7 +966,8 @@ body.mono .nextrow{font:500 11px/1 var(--mono);letter-spacing:.14em;text-transfo
 body.mono .nextrow input{background:#000;border:1px solid #ffffff33;border-radius:3px;color:#fff;font:600 16px var(--mono)}
 body.mono .nextrow button{background:#000;border:1px solid #ffffff33;border-radius:3px;color:#fff}
 body.mono .nextrow button:hover{background:#fff;color:#000}
-body.mono .bidteams{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+body.mono .bidteams{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+body.mono .bidteams .bplus{border-left:1px solid #ffffff2a;padding:4px 2px;width:56px}
 body.mono .bidteams button{background:#000;border:1px solid #ffffff2a;border-left:3px solid var(--c);border-radius:4px;padding:9px 12px;color:#fff;transition:background .15s,border-color .15s}
 body.mono .bidteams button:hover:not(:disabled){background:#161616;border-color:#ffffff66;border-left-color:var(--c)}
 body.mono .bidteams button:disabled{opacity:.35}
@@ -1245,6 +1258,21 @@ body.mono .winner b{font-family:var(--tall);font-weight:400;font-size:22px;lette
 .cgim img,.cgim svg{max-width:100%;max-height:100%;object-fit:contain}
 .cgc b{display:block;font:600 12px/1.2 var(--mono);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}
 @media(max-width:640px){.cgrid{bottom:44px}.cgcars{flex-wrap:wrap;gap:6px}.cgc{flex:0 0 calc(25% - 5px)}.cgc b{font-size:10px}}
+.csplits{position:absolute;inset:0;z-index:6;display:grid;place-items:center;padding:16px;background:#000000b3;opacity:0;pointer-events:none;transition:opacity .5s}
+.csplits.show{opacity:1}
+.csp{width:min(1100px,96vw);background:#050505;border:1px solid #ffffff2a;border-top:3px solid var(--acc);border-radius:6px;padding:18px 20px}
+.csph small{display:block;font:600 11px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:#bdbdbd}
+.csph b{display:block;font-family:var(--tall);font-weight:400;font-size:clamp(28px,4vw,52px);line-height:1.05;color:#fff;text-transform:uppercase;margin:6px 0 12px;letter-spacing:.03em}
+.csprow{display:grid;grid-template-columns:minmax(120px,1.4fr) repeat(4,1fr);gap:10px;align-items:center;padding:7px 0;border-top:1px solid #ffffff14;animation:rise .45s both;animation-delay:calc(var(--i) * 90ms)}
+.csprow.csphead{border-top:0;padding-top:0;font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8d8d;animation:none}
+.cspn{display:flex;align-items:center;gap:8px;min-width:0;border-left:3px solid var(--c);padding-left:8px}
+.cspn em{font:600 13px/1.2 var(--mono);font-style:normal;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cspc{position:relative;height:26px;display:flex;align-items:center;padding:0 8px;background:#ffffff0a;border-radius:3px;overflow:hidden}
+.cspc i{position:absolute;left:0;top:0;bottom:0;width:var(--w);background:color-mix(in srgb,var(--c) 50%,transparent);transform-origin:left;animation:barin 1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 90ms + .3s)}
+.cspc b{position:relative;font:600 13px/1 var(--mono);color:#fff;white-space:nowrap}
+.cspc.best b{color:#ffd166}
+@keyframes barin{from{transform:scaleX(0)}}
+@media(max-width:640px){.csp{padding:12px 10px}.csprow{grid-template-columns:1.1fr repeat(4,1fr);gap:4px}.cspn{gap:4px;padding-left:5px}.cspn .badge{display:none}.cspn em,.cspc b{font-size:10px}.cspc{padding:0 3px}}
 .cgantry{position:absolute;left:50%;top:12%;transform:translateX(-50%) translateY(-30px);z-index:4;text-align:center;opacity:0;transition:opacity .4s,transform .5s;will-change:opacity,transform}
 .cgantry.show{opacity:1;transform:translateX(-50%)}
 .cgbar{display:inline-flex;gap:14px;padding:16px 20px;background:#0a0a0a;border:2px solid #333;border-radius:6px;box-shadow:0 30px 60px #000}
@@ -1479,12 +1507,12 @@ addParts('engine', 'en', [
 ]);
 addParts('exhaust', 'ex', [
   {name: 'Standard Exhaust', rating: 40, gain: 0, kg: 28, art: {pipes: 1, from: 9, w: 2, muff: 34}, blurb: 'Quiet, restrictive and heavy. It does the job.'},
-  {name: 'Axle-Back Exhaust', rating: 55, gain: .02, kg: 26, art: {pipes: 1, from: 2, w: 2.5, muff: 28}, blurb: 'New rear section. A little more flow, a lot more noise.'},
-  {name: 'Cat-Back Exhaust', rating: 63, gain: .04, kg: 24, art: {pipes: 1, from: 1, w: 2.5, muff: 26}, blurb: 'Everything behind the catalyst opened up.'},
-  {name: 'High-Flow Single Exhaust', rating: 71, gain: .06, kg: 20, art: {pipes: 1, from: 0, w: 4, muff: 18}, blurb: 'One fat, straight pipe. Light and free-breathing.'},
-  {name: 'Dual Exhaust', rating: 78, gain: .08, kg: 25, art: {pipes: 2, from: 0, w: 3, muff: 24}, blurb: 'Twin pipes for big engines that need to exhale.'},
-  {name: 'Racing Headers with Full Exhaust', rating: 88, gain: .12, kg: 19, art: {pipes: 2, from: 0, w: 3, muff: 16, headers: 1}, blurb: 'Tuned headers through to the tips. Power everywhere.'},
-  {name: 'Titanium Racing Exhaust', rating: 96, gain: .15, kg: 11, art: {pipes: 2, from: 0, w: 3.5, muff: 14, headers: 1, ti: 1}, blurb: 'Maximum flow at almost no weight. Burnt-blue tips included.'},
+  {name: 'Axle-Back Exhaust', rating: 55, gain: .015, kg: 26, art: {pipes: 1, from: 2, w: 2.5, muff: 28}, blurb: 'New rear section. A little more flow, a lot more noise.'},
+  {name: 'Cat-Back Exhaust', rating: 63, gain: .03, kg: 24, art: {pipes: 1, from: 1, w: 2.5, muff: 26}, blurb: 'Everything behind the catalyst opened up.'},
+  {name: 'High-Flow Single Exhaust', rating: 71, gain: .045, kg: 20, art: {pipes: 1, from: 0, w: 4, muff: 18}, blurb: 'One fat, straight pipe. Light and free-breathing.'},
+  {name: 'Dual Exhaust', rating: 78, gain: .055, kg: 25, art: {pipes: 2, from: 0, w: 3, muff: 24}, blurb: 'Twin pipes for big engines that need to exhale.'},
+  {name: 'Racing Headers with Full Exhaust', rating: 88, gain: .08, kg: 19, art: {pipes: 2, from: 0, w: 3, muff: 16, headers: 1}, blurb: 'Tuned headers through to the tips. Power everywhere.'},
+  {name: 'Titanium Racing Exhaust', rating: 96, gain: .10, kg: 11, art: {pipes: 2, from: 0, w: 3.5, muff: 14, headers: 1, ti: 1}, blurb: 'Maximum flow at almost no weight. Burnt-blue tips included.'},
 ]);
 addParts('gearbox', 'gb', [
   {name: 'Basic 5-Speed Manual', rating: 40, gears: 5, shift: .45, eff: .84, launch: .88, miss: .06, kg: 48, art: {t: 'H', n: 5}, blurb: 'Long throws and wide ratios. Miss a shift and you lose time.'},
@@ -1492,8 +1520,8 @@ addParts('gearbox', 'gb', [
   {name: '6-Speed Manual', rating: 64, gears: 6, shift: .34, eff: .87, launch: .90, miss: .05, kg: 48, art: {t: 'H', n: 6}, blurb: 'An extra ratio keeps the engine in its power band.'},
   {name: '6-Speed Automatic', rating: 70, gears: 6, shift: .25, eff: .85, launch: .95, miss: 0, kg: 72, art: {t: 'A', n: 6}, blurb: 'Never misses a shift, launches cleanly, but saps some power.'},
   {name: '8-Speed Automatic', rating: 80, gears: 8, shift: .16, eff: .88, launch: .96, miss: 0, kg: 82, art: {t: 'A', n: 8}, blurb: 'Eight close ratios and quick changes. Heavy.'},
-  {name: '7-Speed Dual-Clutch Transmission', rating: 91, gears: 7, shift: .06, eff: .92, launch: 1, miss: 0, kg: 76, art: {t: 'D', n: 7}, blurb: 'Near-seamless shifts and perfect launches.'},
-  {name: '6-Speed Sequential Gearbox', rating: 95, gears: 6, shift: .04, eff: .94, launch: .98, miss: .01, kg: 50, art: {t: 'S', n: 6}, blurb: 'Race-bred, brutal and light. The fastest shifts on the grid.'},
+  {name: '7-Speed Dual-Clutch Transmission', rating: 91, gears: 7, shift: .06, eff: .91, launch: 1, miss: 0, kg: 76, art: {t: 'D', n: 7}, blurb: 'Near-seamless shifts and perfect launches.'},
+  {name: '6-Speed Sequential Gearbox', rating: 95, gears: 6, shift: .04, eff: .92, launch: .98, miss: .01, kg: 50, art: {t: 'S', n: 6}, blurb: 'Race-bred, brutal and light. The fastest shifts on the grid.'},
 ]);
 addParts('aero', 'ae', [
   {name: 'Standard Body', rating: 40, cda: .72, cla: .10, kg: 0, blurb: 'A plain shell. No tricks, lots of drag.'},
@@ -1811,10 +1839,12 @@ function gl3() {
   cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   return r;
 }
+// the shared renderer's resolution: up to 1.5x on sharp screens, stepping down to 1x and then 0.85x if a view keeps running slow
+const glPr = () => Math.min(window.devicePixelRatio || 1, [1.5, 1, 1][GL3.q || 0]) * [1, 1, .85][GL3.q || 0];
 // hand the shared canvas to a view for this frame, at that view's size
 function claim3(v, w, h) {
   const r = v.r; if (r.domElement.parentNode !== v.dom) v.dom.insertBefore(r.domElement, v.dom.firstChild);
-  if (GL3.owner !== v || GL3.w !== w || GL3.h !== h) { GL3.owner = v; GL3.w = w; GL3.h = h; r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); r.setSize(w, h, false); }
+  if (GL3.owner !== v || GL3.w !== w || GL3.h !== h) { GL3.owner = v; GL3.w = w; GL3.h = h; r.setPixelRatio(glPr()); r.setSize(w, h, false); }
 }
 // borrow the shared renderer for an off-screen picture at 1x, then release it so the next view re-sizes
 function shot3(w, h) { const r = gl3(); GL3.owner = null; GL3.w = GL3.h = 0; r.setPixelRatio(1); r.setSize(w, h, false); r.setClearColor(0x000000, 0); return r; }
@@ -1865,7 +1895,9 @@ function rod(g, m, a, b, r = .013) { const A = new T3.Vector3(...a), B = new T3.
 function tube(g, m, pts, r, seg = 16) { const o = mesh(new T3.TubeGeometry(new T3.CatmullRomCurve3(pts.map(q => new T3.Vector3(...q))), seg, r, 10, false), m); g.add(o); return o; }
 const lofted = (g, m, secs, seg) => { const o = mesh(loft(secs, seg), m); g.add(o); return o; };
 function grp(car, cat, off, label) { const g = new T3.Group(); g.userData = {cat, off: new T3.Vector3(...off), label}; car.add(g); return g; }
-function junk(o) { o.traverse(m => { if (m.geometry) m.geometry.dispose(); const mt = m.material; if (mt) { if (mt.map) mt.map.dispose(); mt.dispose(); } if (m.userData.hm) m.userData.hm.dispose(); }); }
+// free a removed object's geometry and textures. Materials are not disposed: that would also delete their compiled shaders, and the
+// next car or lot would stall to compile the very same ones again (the site uses a small, fixed set of them).
+function junk(o) { o.traverse(m => { if (m.geometry) m.geometry.dispose(); const mt = m.material; if (mt && mt.map) mt.map.dispose(); }); }
 
 function mkEngine(car, p, M, col) {
   const g = grp(car, 'engine', [0, .15, 0], true), a = p.art, V = a.l === 'V', per = V ? a.c / 2 : a.c, len = .105 * per + .12, cx = -.5 - len / 2, A = accent(col);
@@ -2086,6 +2118,8 @@ function tick3(now) {
   if (!keys.length) { loop3 = 0; return; }
   const seen = k => { const h = VIEWS[k].dom.parentNode; if (!h) return false; const r = h.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; };
   if (VIEWS.intro) { VIEWS.intro.frame(dt); if (VIEWS.intro.time > .25) LOAD.p = 1; } else keys.filter(k => !(overlay.innerHTML && !overlay.contains(VIEWS[k].dom)) && seen(k)).forEach(k => VIEWS[k].frame(dt));
+  // steady frames only (not the loading screen, not one-off stalls such as a first shader compile) decide the resolution step
+  if (GL3 && !VIEWS.intro && dt > .001 && dt < .045) { GL3.ft = GL3.ft ? GL3.ft * .93 + dt * .07 : dt; if ((GL3.q || 0) < 2 && GL3.ft > 1 / 44 && now - (GL3.qAt || 0) > 1500) { GL3.q = (GL3.q || 0) + 1; GL3.qAt = now; GL3.ft = 0; GL3.w = 0; } }
   loop3 = requestAnimationFrame(tick3);
 }
 function v3slot(key, cfg, fallback) { V3CFG[key] = cfg; return `<div class="v3" data-v3="${key}">${fallback()}</div>`; }   // the drawing shows until the 3D view takes over
@@ -2247,11 +2281,10 @@ function bwWheel(M) {
 }
 /* ---- the drag strip at night: real-size cars, one lane each, timing tree, scoreboard, shutdown area ---- */
 const LW = 5.2, NOSE = 3.05, RUN = QM + 560, TREE_X = 7;
-// start lights, seconds into the sequence: five reds come on a second apart, then after a hold nobody can time (1 to 2.5 s)
-// all five turn green together, 6 to 7.5 s after the sequence starts
-const LIGHT_GAP = 1;
-let TREE_GO = 6.5;
-const armTree = () => { TREE_GO = LIGHT_GAP * 5 + 1 + Math.random() * 1.5; };
+// start lights, seconds into the sequence. Race night: five reds a second apart, then after a hold nobody can time (1 to 2.5 s)
+// all five turn green together, 6 to 7.5 s in. A team's test run in the garage: a quick 0.4 s sequence, green at 2.4 s.
+let LIGHT_GAP = 1, TREE_GO = 6.5;
+const armTree = quick => { LIGHT_GAP = quick ? .4 : 1; TREE_GO = quick ? 2.4 : LIGHT_GAP * 5 + 1 + Math.random() * 1.5; };
 const treeOn = (k, lt) => lt >= TREE_GO ? (lt < TREE_GO + 2.5 ? 'g' : '') : lt >= LIGHT_GAP * (k + 1) ? 'r' : '';
 function race3(race) {
   const T = T3, n = race.cars.length; let v = R3.v;
@@ -2458,6 +2491,7 @@ function draw3(race) {
   if (dt > 0 && dt < .09) v.ft = v.ft ? v.ft * .92 + dt * .08 : dt;
   if (v.clock - v.qAt > 1.2 && v.ft > 1 / 44 && (v.q || 0) < 4) { v.q = (v.q || 0) + 1; v.qAt = v.clock; v.ft = 0; }
   const st = race.state, live = st === 'run' || st === 'done' || st === 'replay', dtS = live ? dt * playSpeed : dt, cars = race.cars, n = cars.length, hw = v.hw;
+  if (st !== 'replay') v.rpi = -1; else if (v.rpi !== race.rpi) { v.rpi = race.rpi; v.smoke.life.fill(0); v.smoke.alpha.fill(0); }
   const sm = v.smoke, puff = (x, z, k) => { const j = sm.i++ % sm.n, p = j * 3; sm.pos[p] = x; sm.pos[p + 1] = .35; sm.pos[p + 2] = z; sm.vel[p] = (Math.random() - .65) * 4 * k; sm.vel[p + 1] = .7 + Math.random() * 1.3; sm.vel[p + 2] = (Math.random() - .5) * 2.6; sm.life[j] = sm.max[j] = 1.1 + Math.random() * 1.2; };
   // burnouts: on the grid walk and through the first reds every car lights up its rear tyres, each on its own rhythm
   const bt = st === 'walk' ? race.wt : st === 'lights' && race.lt < 2.6 ? race.lt : -1;
@@ -2506,7 +2540,7 @@ function draw3(race) {
   else if (st === 'open') shot = 'fly';
   else if (st === 'walk') shot = race.wt >= race.gridAt ? 'grid' : 'walk';
   else if (st === 'lights') shot = race.lt < 2.8 ? 'burn' : 'tree';
-  else if (st === 'replay') shot = 'replay';
+  else if (st === 'replay') shot = (race.rps && race.rps[race.rpi].shot) || 'replay';
   else if (t < 1.6) shot = 'launch';
   else if (!run.length) shot = 'shut';
   else if (!fin.length) { const ttl = (QM - RL.pos) / Math.max(RL.v, 1); shot = RL.pos > QM - 9 ? 'photo' : ttl < 1.6 ? 'head' : ['track', 'onboard', 'heli', 'rail', 'chase'][Math.floor((t - 1.6) / 3.2) % 5]; }
@@ -2523,7 +2557,7 @@ function draw3(race) {
     case 'grid': { const p = clamp((race.wt - race.gridAt) / 3.6), e = p * p * (3 - 2 * p), d = 30 - e * 8; P.set(d - 3, 2.2 + 3 * (1 - e), (hw + 6) * .35 * (1 - e)); K.set(-3.5, .4, 0); fov = fit(hw + 2.5, d); break; }   // the whole field on the line, side by side
     case 'walk': { const p = clamp(race.wt / (race.gridAt || race.wd)), zc = -(hw + 2) + p * (2 * hw + 4); P.set(5, .95, zc); K.set(-5, .55, zc * .9); fov = 50; break; }   // across the noses, burnouts behind
     case 'burn': P.set(16, 1.5, hw + 1.6); K.set(-6, .9, -hw * .15); fov = 46; break;   // low at the wall: the whole field lighting up its tyres
-    case 'tree': P.set(-9.5, 1.55, v.treeZ + LW / 2); K.set(TREE_X, 2.3, v.treeZ); fov = 40; break;   // over a rear wing at the tree
+    case 'tree': P.set(-9.5, 1.55, v.treeZ - LW * .75); K.set(TREE_X, 2.3, v.treeZ); fov = 40; break;   // over a rear wing at the tree
     case 'launch': P.set(17, .5, hw + .8); K.set(0, .7, -hw * .2); fov = 50; shake = .07 * clamp(1 - Math.abs(t - .3) / 1.2); break;   // at the wall, the field launches at the lens
     case 'track': P.set(sx + 3, 5, hw + 9 + Math.min(10, spread) * .5); K.set((sx + tx) / 2 + 1, .4, 0); fov = Math.min(44, 30 + spread * .3); shake = .01; break;   // camera crane on the service road
     case 'onboard': P.set(sx - .45, 1.32, sz); K.set(sx + 40, .85, sz); fov = 62; shake = .004 + sub.v * .00009; break;   // T-cam over the airbox
@@ -2532,10 +2566,11 @@ function draw3(race) {
     case 'chase': P.set(tx - 16, 2.1, sz * .4); K.set(sx + 25, .9, 0); fov = 20; shake = .01; break;   // long lens from behind, the pack compressed
     case 'head': P.set(QM + 90, 1.3, hw + .8); K.set(QM - 70, .9, 0); fov = 12; break;   // telephoto down the strip from past the finish
     case 'photo': { const d = Math.hypot(hw + 12, 6.5); P.set(QM + 1.2, 7, hw + 12); K.set(QM + 1.2, .4, 0); fov = fit(13, d); break; }   // raised, square to the line
+    case 'rlaunch': P.set(-22, 3, 0); K.set(Math.max(14, (sx + tx) / 2 + 12), .8, 0); fov = fit(hw + 2.5, 19); break;   // from behind the line, the whole field leaving
     case 'replay': { const d = Math.hypot(hw + 9, 3); P.set(QM + 1.2, 3.4, hw + 9); K.set(QM + 1.2, .45, 0); fov = fit(8, d); break; }
     case 'shut': { const c = win || sub, x = ox(c), z = lz(c); P.set(x - 7, 2.6, z + 12); K.set(x - 2.5, .8, z); fov = 38; break; }   // the winner on the brakes, chute out
   }
-  if (v.cam.aspect < 1.2 && shot !== 'photo' && shot !== 'replay' && shot !== 'grid') fov = Math.min(100, 2 * Math.atan(Math.tan(fov * Math.PI / 360) * Math.pow(1.2 / v.cam.aspect, .8)) * 360 / Math.PI);
+  if (v.cam.aspect < 1.2 && shot !== 'photo' && shot !== 'replay' && shot !== 'grid' && shot !== 'rlaunch') fov = Math.min(100, 2 * Math.atan(Math.tan(fov * Math.PI / 360) * Math.pow(1.2 / v.cam.aspect, .8)) * 360 / Math.PI);
   const j = k => (Math.sin(v.clock * 13.1 + k * 1.7) * .6 + Math.sin(v.clock * 7.3 + k * 4.1) * .4 + Math.sin(v.clock * 23.7 + k * 2.3) * .15) * shake;
   P.x += j(1); P.y += j(2) * .7; P.z += j(3);
   if (Math.abs(v.cam.fov - fov) > .01) { v.cam.fov = fov; v.cam.updateProjectionMatrix(); }
@@ -2551,7 +2586,13 @@ function on3D() {
   const T = window.THREE; T3 = T;
   LOAD.p = Math.max(LOAD.p, .15);
   try { makeThumbs(err => { if (err) { T3 = null; LOAD.p = 1; return; }
-    try { const pv = new Viewer(); pv.set({build: SHOW, color: LIVERY, hi: {}, explode: true, word: '', mono: true}); shot3(320, 200); pv.r.render(pv.scene, pv.cam); pv.shell.forEach(m => { m.material = pv.xmat; }); pv.edges.forEach(e => { e.visible = true; }); pv.r.render(pv.scene, pv.cam); pv.v3warm = 1; POOL.push(pv); } catch (e) {}
+    try { const pv = new Viewer(); pv.set({build: SHOW, color: LIVERY, hi: {}, explode: true, word: '', mono: true}); shot3(320, 200); pv.r.render(pv.scene, pv.cam); pv.shell.forEach(m => { m.material = pv.xmat; }); pv.edges.forEach(e => { e.visible = true; }); pv.r.render(pv.scene, pv.cam);
+      const wh = document.createElement('div'); wh.style.cssText = 'position:fixed;left:-10000px;top:0;width:480px;height:300px'; document.body.appendChild(wh); wh.appendChild(pv.dom);
+      [{build: SHOW, color: LIVERY, hi: {engine: '#a8d0e2'}, explode: true, loop: true, labels: true, act: true, word: 'Engine', mono: true},
+       {build: SHOW, color: LIVERY, hi: {engine: '#e23a2e'}, subs: {engine: 'V12'}, explode: true, loop: true, labels: true, word: 'Engine'},
+       {build: SHOW, color: LIVERY, hi: {engine: '#e23a2e'}, subs: {engine: 'V12'}, explode: false, xray: true, loop: true, labels: true, word: 'Engine'}].forEach(c => { pv.set(c); for (let k = 0; k < 4; k++) pv.frame(5.1); });   // run each through exploded, x-ray and assembled, off screen
+      wh.remove(); GL3.owner = null; GL3.w = 0;
+      pv.v3warm = 1; POOL.push(pv); } catch (e) {}
     LOAD.p = Math.max(LOAD.p, .9); if (SIL) document.querySelectorAll('#intro .sil').forEach(im => { im.src = SIL; }); // still on the intro: draw the pages with the new card art; already past it: swap the art in place, nothing re-renders under the user
     if ($('#intro')) { if (!busy()) render(); } else { LOAD.p = 1; refreshArt(); mount3D(); } }); } catch (e) { T3 = null; LOAD.p = 1; }
 }
@@ -2562,7 +2603,7 @@ function load3D() { if (window.THREE) return on3D(); const sc = document.createE
 /* ================= shared ui ================= */
 const app = $('#app'), overlay = $('#overlay');
 let S = null, MODE = 'org', PKG = null, GS = null, block = null, race = null, raf = 0, playSpeed = 1, pendingYes = null;
-let dealing = false, entering = true, jolt = false, bump = false, showX = false, xAnim = false, lockT = 0;
+let boardStale = false, dealing = false, entering = true, jolt = false, bump = false, showX = false, xAnim = false, lockT = 0;
 const SFX = (() => {
   let ctx = null, master = null, on = false, muted = fetchStore('agp-mute') === true, eng = null;
   const ac = () => {
@@ -2594,11 +2635,18 @@ const SFX = (() => {
   const kick = (c, out, t, vol) => { const o = c.createOscillator(), g = c.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + .12); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + .32); o.connect(g); g.connect(out); o.start(t); o.stop(t + .36); };
   /* ---- the race soundtrack: a driving 126 bpm loop in A minor (Am, F, C, G), played live. intro: title card and grid walk;
      lights: the beat drops out and a riser builds; race: the full beat from the green; finale: the timeslips ---- */
-  const SPB = 60 / 126 / 4, PROG = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]], MV = {intro: .5, lights: .45, race: .38, finale: .55};
+  const SPB = 60 / 126 / 4, PROG = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]], MV = {intro: .5, lights: .45, race: .38, finale: .55, auction: .42};
   const mf = m => 440 * Math.pow(2, (m - 69) / 12);
   let mus = null;
   function step16(c, out, t, i, sec) {
     const bar = Math.floor(i / 16) % 4, k = i % 16, ch = PROG[bar], full = sec === 'race' || sec === 'finale', lit = sec === 'lights';
+    if (sec === 'auction') {   // the lot timer: a soft pulse, a ticking clock and a gentle arpeggio under the room
+      if (k === 0 || k === 8) kick(c, out, t, .32);
+      if (k % 4 === 2) hitN(c, out, t, .03, 'highpass', 9000, .7, .045);
+      if (k % 8 === 0) note(c, out, t, mf(ch[0] - 24), SPB * 3, 'triangle', .16, 420);
+      if (k % 2 === 0) note(c, out, t, mf(ch[[0, 2, 1, 2][(k / 2) % 4]] + 12), SPB * 1.6, 'triangle', .035, 2200);
+      return;
+    }
     if (!lit && k % 4 === 0) kick(c, out, t, full ? .9 : .6);
     if (full && (k === 4 || k === 12)) hitN(c, out, t, .14, 'bandpass', 1600, .8, .35);                                  // clap on 2 and 4
     if (k % 2 === 1 || lit) hitN(c, out, t, lit ? .03 : .045, 'highpass', 7500, .7, lit ? .05 : .08);                  // hats (16ths while the lights hold)
@@ -2791,7 +2839,7 @@ function resetAuction(all, quiet) {
 }
 function toast(msg, bad, html) { if (bad) SFX.error(); const d = document.createElement('div'); d.className = 'toast' + (bad ? ' bad' : html ? ' sold' : ''); if (html) d.innerHTML = html; else d.textContent = msg; $('#toasts').appendChild(d); setTimeout(() => d.remove(), html ? 3800 : 2800); }
 function showOverlay(html, cls = '', style = '') { overlay.innerHTML = `<div class="ov-bg" data-act="closeOverlay"></div><div class="ov-box ${cls}" style="${style}"><button class="ov-x" data-act="closeOverlay" aria-label="Close">×</button>${html}</div>`; }
-function closeOverlay() { overlay.innerHTML = ''; block = null; pendingYes = null; mount3D(); }
+function closeOverlay() { if (block) SFX.musicStop(); overlay.innerHTML = ''; block = null; pendingYes = null; if (boardStale) { boardStale = false; render(); } else mount3D(); }
 function ask(msg, yes, fn) { showOverlay(`<h2 style="font-size:20px;margin-bottom:8px">Are you sure?</h2><p style="color:var(--mut)">${esc(msg)}</p><div class="btnrow"><button class="btn pri" data-act="yes">${esc(yes)}</button><button class="btn ghost" data-act="closeOverlay">Cancel</button></div>`); pendingYes = fn; }
 function copy(text, okMsg) {
   const fallback = () => { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); toast(ok ? okMsg : 'Copy failed — select the text and copy it manually', !ok); };
@@ -2880,9 +2928,9 @@ const LOGO = (() => {
 })();
 const muteBtn = () => `<button class="mutebtn ${SFX.muted() ? 'off' : ''}" data-act="mute" title="Sound on / off" aria-label="Toggle sound"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/>${SFX.muted() ? '<path d="M11 6l4 4M15 6l-4 4"/>' : '<path d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.2 3.6a6 6 0 0 1 0 8.8"/>'}</svg></button>`;
 function header() {
-  if (MODE === 'garage') return `<header class="top g"><div class="brand">${LOGO}<div><b>${esc(PKG.title || 'Grand Bid Prix')}</b><small>Team garage${PKG.grp ? ' · ' + esc(PKG.grp) : ''} · ${COLLAB(17)}</small></div></div><div class="teampill">${badge(PKG.team, 26)}${esc(PKG.team.name)}</div>${muteBtn()}</header>`;
+  if (MODE === 'garage') return `<header class="top g"><div class="brand">${LOGO}<div><b>${esc(PKG.title || 'Grand Bid Prix')}</b><small>Team garage${PKG.grp ? ' · ' + esc(PKG.grp) : ''} · ${COLLAB(28)}</small></div></div><div class="teampill">${badge(PKG.team, 26)}${esc(PKG.team.name)}</div>${muteBtn()}</header>`;
   const tabs = [['setup', 'Briefing'], ['auction', 'Auction'], ['packages', 'Packages'], ['race', 'Race']];
-  return `<header class="top"><div class="brand">${LOGO}<div><b>${esc(S.title)}</b><small>${COLLAB(17)}</small></div></div><nav class="tabs">${tabs.map(([id, l], i) => `<button class="${S.tab === id ? 'on' : ''}" data-act="tab" data-tab="${id}"><i>${i + 1}</i>${l}</button>`).join('')}</nav>${muteBtn()}</header>`;
+  return `<header class="top"><div class="brand">${LOGO}<div><b>${esc(S.title)}</b><small>${COLLAB(28)}</small></div></div><nav class="tabs">${tabs.map(([id, l], i) => `<button class="${S.tab === id ? 'on' : ''}" data-act="tab" data-tab="${id}"><i>${i + 1}</i>${l}</button>`).join('')}</nav>${muteBtn()}</header>`;
 }
 function render() {
   cancelAnimationFrame(raf); SFX.engineStop(); SFX.tyresStop();
@@ -2931,9 +2979,8 @@ function viewSetup() {
 <label class="field"><span>Event name</span><input class="inp" data-in="title" value="${esc(S.title)}" maxlength="40"></label>
 <div class="frow"><label class="field"><span>Budget per team (credits)</span><input class="inp" type="number" min="1000" step="500" data-in="budget" value="${S.budget}"></label>
 <label class="field"><span>Smallest clock step (credits)</span><input class="inp" type="number" min="1" step="10" data-in="step" value="${S.step}"></label></div>
-<div class="frow"><label class="field"><span>Finish the auction within (min)</span><input class="inp" type="number" min="5" max="120" step="1" data-in="cap" value="${capMin()}" ${Object.keys(S.sales).length ? 'disabled' : ''}></label>
-<div class="field"><span>Estimated auction</span><b class="aest" id="aest">${aestText()}</b></div></div>
-<label class="field"><span>Group name (if several laptops run groups)</span><input class="inp" data-in="group" value="${esc(S.group || '')}" maxlength="12" placeholder="e.g. A"></label>
+<label class="field"><span>Group name</span><input class="inp" data-in="group" value="${esc(S.group || '')}" maxlength="12" placeholder="e.g. A"></label>
+<div class="field"><span>Race music</span><div class="songrow"><label class="btn ghost sm">Choose a song<input type="file" accept="audio/*" data-in="song" hidden></label><b id="songname">${SONG ? esc(SONG.name) : 'Built-in soundtrack'}</b><button class="btn ghost sm" data-act="songClear" id="songclr" ${SONG ? '' : 'hidden'}>Remove</button></div></div>
 <div class="btnrow"><button class="btn" data-act="mock">Run a mock auction</button><button class="btn ghost" data-act="clearSales">Clear auction results</button><button class="btn ghost" data-act="resetAll">Reset everything</button><button class="btn ghost" data-act="intro">Replay intro</button></div>
 <p class="tdesc">The mock auction sells every remaining part to a random team, so you can test packages and races end to end before the real event.</p></div>
 <div class="panel"><h2>Teams (${S.teams.length})</h2>${S.teams.map(t => `<div class="trow"><button class="bbtn" data-act="emblem" data-id="${t.id}" title="Change emblem">${badge(t, 40)}</button><input class="inp" data-in="tname" data-id="${t.id}" value="${esc(t.name)}" maxlength="24" aria-label="Team name"><input type="color" data-in="tcolor" data-id="${t.id}" value="${t.color}" aria-label="Team colour" title="Team colour"><button class="btn sm ghost" data-act="rmTeam" data-id="${t.id}" ${S.teams.length <= 2 ? 'disabled' : ''}>Remove</button></div>`).join('')}
@@ -2945,7 +2992,7 @@ function viewSetup() {
 <li><div><b>Race.</b> Builds land in the Race tab. Start the lights and run them down the 400 m strip. Several laptops? Combine their result codes in the Race tab.</div></li></ol></div></div></details>`;
   return `<div class="brief">
 <div class="bhero"><div class="bscene">${v3slot('loop', {kind: 'loop', cuts: true, every: 2.6}, () => '')}</div><div class="bfx">${'<i></i>'.repeat(6)}</div>
-<div class="bnav"><span class="lbl">${LOGO}Driver briefing</span>${COLLAB(16)}</div>
+<div class="bnav"><span class="lbl">${LOGO}Driver briefing</span>${COLLAB(24)}</div>
 <h1 class="bt glt">${word(S.title)}</h1>
 <div class="bfoot"><div class="rings"><span>${S.teams.length}</span><span>24</span></div><div class="bcap">teams · lots</div><div class="bsub">Bid · Build · Race · scroll to unfold the briefing</div></div></div>
 <section class="letter" data-reveal><div class="lbg glt" aria-hidden="true">${['Read', 'the', 'rules', 'before', 'the', 'lights'].map((w, i) => `<span class="w" data-w="${w}" style="--i:${i}">${w}</span>`).join('')}</div>
@@ -3029,12 +3076,10 @@ function auctionMinutes() {
   lots.forEach((p, i) => { const clear = Math.min(S.budget * .95, Math.max(p.price, pot * d[i] / D)); let pr = p.price, n = 1; while (pr < clear && n < 400) { pr += raiseFor(pr); n++; } steps += n; });
   return Math.round((lots.length * 24 + steps * 4) / 60);
 }
-// The clock's step is sized to finish the auction within the host's time: at least 10 % a step, raised (up to 40 %) until the
-// estimate fits. It is fixed once the first part sells, so the clock never changes pace mid-auction.
-const capMin = () => S.cap || Math.min(35, 14 + S.teams.length);
+// The clock's step is sized from the field so the auction keeps moving (about 20 min for 6 teams, never past 35): at least 10 % a
+// step, raised (up to 40 %) until the estimate fits. It is fixed once the first part sells, so the clock never changes pace mid-auction.
+const capMin = () => Math.min(35, 14 + S.teams.length);
 function retune() { if (Object.keys(S.sales).length) return; for (S.raise = 10; S.raise < 40 && auctionMinutes() > capMin(); S.raise++); }
-const aestText = () => `≈ ${auctionMinutes()} min · ${S.teams.length} teams · clock +${S.raise}%`;
-const aestUpd = () => { const e = $('#aest'); if (e) e.textContent = aestText(); };
 // the smallest raise allowed on a bid, rounded up to the minimum step
 const raiseFor = bid => Math.max(S.step, Math.ceil(bid * (S.raise || 0) / 100 / S.step) * S.step);
 // the next unsold lot in board order (category by category, cheapest first) after the one on the block
@@ -3047,11 +3092,12 @@ const lotTxt = sec => { const c = Math.ceil(sec); return c > 0 ? Math.floor(c / 
 setInterval(() => {
   const e = block && block.t0 && $('#ltimer'); if (!e) return; const sec = lotLeft(), tx = lotTxt(sec);
   if (e.textContent !== tx) e.textContent = tx; e.classList.toggle('low', sec > 0 && sec <= 10); e.classList.toggle('up', sec <= 0);
-  if (sec <= 0 && !block.rang) { block.rang = true; SFX.beep(); setTimeout(() => SFX.beep(), 260); }
+  if (sec <= 0 && !block.rang) { block.rang = true; SFX.musicStop(); SFX.beep(); setTimeout(() => SFX.beep(), 260); }
 }, 250);
 function openBlock(id) {
   const p = PARTS[id], sale = S.sales[id], col = TIERS[p.tier].color;
   showOverlay(`<div class="ghostw">${CAT[p.cat].one}</div><div class="blk"><div class="blk-card" id="blk-card"></div><div class="blk-x" id="blk-x">${v3slot('stage', {build: Object.assign({}, SHOW, {[p.cat]: p.id}), color: sale ? team(sale.team).color : LIVERY, hi: {[p.cat]: sale ? team(sale.team).color : col}, subs: {[p.cat]: p.name}, explode: !sale, xray: !!sale, loop: true, labels: true, word: CAT[p.cat].one}, () => explodedSVG({hi: {[p.cat]: sale ? team(sale.team).color : col}, subs: {[p.cat]: p.name}, cls: sale ? 'keep' : ''}))}</div><div class="blk-panel" id="blk-panel"></div></div>`, 'stage', `--tc:${col}`);
+  SFX.musicStop();
   // the clock: price on the block, the prices it stepped up from, the last paddle up (not yet hammered), and the lot's timer
   block = {part: id, price: p.price, steps: [], pick: null, hist: [], t0: 0, dur: LOT_S, rang: false};
   drawBlock(true, true); explodeAll(); mount3D();
@@ -3065,8 +3111,8 @@ function drawBlock(withCard, spin) {
   else {
     const pr = block.price, pk = block.pick, one = pk && team(pk.team), tl = lotLeft();
     h = head + `<div class="bidbox"><div><div class="eyebrow">Price on the clock</div><div class="bidnum ${bump ? 'bump' : ''}">${fmt(pr)}<span>credits</span></div></div><button class="ltimer${tl <= 0 ? ' up' : tl <= 10 ? ' low' : ''}" id="ltimer" data-act="lotTime" title="${block.t0 ? 'Tap for 15 more seconds' : 'Start the minute'}">${block.t0 ? lotTxt(tl) : '▶ ' + lotTxt(tl)}</button><div style="margin-left:auto;text-align:right">${one ? `<div class="eyebrow">Last paddle</div><div class="leader"><span class="dot" style="background:${one.color}"></span>${esc(one.name)}</div>` : `<div class="eyebrow">Next step</div><div class="leader">+${fmt(raiseFor(pr))}</div>`}</div></div>
-<div class="nextrow"><span>Price</span><button data-act="nudge" data-d="-1" aria-label="Step the price back" ${block.steps.length ? '' : 'disabled'}>−</button><input class="inp" type="number" data-in="next" value="${pr}" aria-label="Price on the clock"><button data-act="nudge" data-d="1" aria-label="Raise the price one step">+</button><span>raise it while two paddles are up · tap the last team standing</span></div>
-<div class="bidteams">${S.teams.map(t => { const me = pk && pk.team === t.id; return `<button style="--c:${t.color}" class="${me ? 'lead' : ''}" data-act="bid" data-team="${t.id}" ${!me && left(t.id) < pr ? 'disabled' : ''}>${badge(t, 30)}<div><b>${esc(t.name)}</b><small>${me ? 'Takes it · ' + fmt(pk.price) : fmt(left(t.id)) + ' credits left'}</small></div></button>`; }).join('')}</div>
+<div class="nextrow"><span>Price</span><button data-act="nudge" data-d="-1" aria-label="Step the price back" ${block.steps.length ? '' : 'disabled'}>−</button><input class="inp" type="number" data-in="next" value="${pr}" aria-label="Price on the clock"><button data-act="nudge" data-d="1" aria-label="Raise the price one step">+</button><span>tap + beside the team that raises · or tap the last team standing</span></div>
+<div class="bidteams">${S.teams.map(t => { const me = pk && pk.team === t.id, nx = pk ? pr + raiseFor(pr) : pr; return `<div class="bteam"><button style="--c:${t.color}" class="${me ? 'lead' : ''}" data-act="bid" data-team="${t.id}" ${!me && left(t.id) < pr ? 'disabled' : ''}>${badge(t, 30)}<div><b>${esc(t.name)}</b><small>${me ? 'Takes it · ' + fmt(pk.price) : fmt(left(t.id)) + ' left'}</small></div></button><button class="bplus" data-act="raiseBid" data-team="${t.id}" title="${me ? 'Holding the lot' : 'Raise for ' + esc(t.name) + ' to ' + fmt(nx)}" aria-label="Raise for ${esc(t.name)}" ${me || left(t.id) < nx ? 'disabled' : ''}>+<small>${fmt(nx)}</small></button></div>`; }).join('')}</div>
 <div class="blk-actions"><button class="btn ghost" data-act="undoBid" ${block.hist.length ? '' : 'disabled'}>Undo</button>${nextLot(p.id) ? '<button class="btn ghost" data-act="nextLot" title="Pass on this lot for now and put the next one on the block">Next ›</button>' : ''}<button class="btn pri big" data-act="sold" ${pk ? '' : 'disabled'}>Sold!</button></div>`;
   }
   $('#blk-panel').innerHTML = h; bump = false;
@@ -3137,8 +3183,8 @@ function entries() {
 /* ---- combined results: each laptop's race result travels as a code; any laptop ranks them together ---- */
 // Every car runs in identical conditions, so a time set on one laptop compares directly with a time set on another (as long
 // as both run this same version: PHYS changes whenever the physics does). Ranked by time to the line; an equal time goes to the
-// car with more horsepower; identical cars share the place. The top three places, ties included, are marked for the quiz.
-const PHYS = 'drag-2', QUIZ = 3;
+// car with more horsepower; identical cars share the place.
+const PHYS = 'drag-3';
 // one row of a result, rounded the same way whether it is this laptop's or arrives in a code, so equal cars compare equal
 const resRow = r => ({n: r.name, c: r.car, col: r.color, em: r.em, t: +r.time.toFixed(4), et: +r.et.toFixed(4), trap: +r.trap.toFixed(2), hp: Math.round(r.hp != null ? r.hp : carSpec(r.build).hp)});
 const resultCode = () => 'AGPR1.' + enc({v: 1, phys: PHYS, id: S.id, title: S.title, group: grpName(), rows: S.last.rows.map(resRow)});
@@ -3165,7 +3211,7 @@ function comboRows() {
 function comboHTML() {
   const {all, n} = comboRows(); if (!all.length) return '<p class="tdesc">No results yet. Race here, or paste result codes from the other laptops.</p>';
   return `<p class="tdesc">${all.length} cars from ${n} race${n === 1 ? '' : 's'}. Fastest time wins; an equal time goes to the car with more horsepower; identical cars share the place.</p>
-<table class="lb"><tr><th>#</th><th>Team</th><th>Group</th><th>Time</th><th>E.T.</th><th>Trap</th><th>hp</th><th></th></tr>${all.map(r => `<tr class="p${r.pos}"><td class="pos">${r.pos}${r.tie ? '<small> tie</small>' : ''}</td><td>${teamCell(r.col, r.n, r.c, r.em)}</td><td>${esc(r.g)}</td><td><b>${r.t.toFixed(3)} s</b></td><td>${r.et.toFixed(3)}</td><td>${Math.round(r.trap * 3.6)} km/h</td><td>${r.hp}</td><td>${r.pos <= QUIZ ? '<span class="status ok">Quiz</span>' : ''}</td></tr>`).join('')}</table>`;
+<table class="lb"><tr><th>#</th><th>Team</th><th>Group</th><th>Time</th><th>E.T.</th><th>Trap</th><th>hp</th></tr>${all.map(r => `<tr class="p${r.pos}"><td class="pos">${r.pos}${r.tie ? '<small> tie</small>' : ''}</td><td>${teamCell(r.col, r.n, r.c, r.em)}</td><td>${esc(r.g)}</td><td><b>${r.t.toFixed(3)} s</b></td><td>${r.et.toFixed(3)}</td><td>${Math.round(r.trap * 3.6)} km/h</td><td>${r.hp}</td></tr>`).join('')}</table>`;
 }
 const TREE_HTML = '<i></i>'.repeat(5);
 function viewRace() {
@@ -3184,13 +3230,39 @@ function viewRace() {
 <div class="panel rres"><h2>Combined results</h2><p class="tdesc">Running groups on more than one laptop? Paste the other laptops' result codes here.</p><textarea class="inp" id="combo" placeholder="Paste result codes, one per line" aria-label="Result codes"></textarea><div class="btnrow"><button class="btn" data-act="combine">Add results</button><button class="btn ghost" data-act="comboShow">Show full screen</button>${Object.keys(S.combo || {}).length ? '<button class="btn ghost" data-act="comboClear">Clear other laptops</button>' : ''}</div><div id="combo-board">${comboHTML()}</div></div></div>`;
 }
 const newCar = e => ({team: e.team, name: e.car, color: e.liv || e.team.color, build: e.build, spec: e.spec, pos: 0, v: 0, a: 0, gear: 1, rpm: 0, fl: 0, fin: false});
+// Get a scene ready between frames instead of all at once: each material goes to the renderer on a stand-in object (same geometry,
+// same material) in a scene with the same kinds of lights, which compiles exactly the shader the real scene will use and uploads
+// that object's geometry and textures. Extra jobs (functions) run in the same time-sliced queue first.
+function warmScene(r, scene, cam, stop, done, jobs = []) {
+  const T = T3, tmp = new T.Scene(), mats = new Map();
+  tmp.fog = scene.fog; tmp.environment = scene.environment;
+  scene.traverse(o => { if (o.isLight) { if (o.visible) tmp.add(o.clone(false)); } else if (o.material && !Array.isArray(o.material) && !mats.has(o.material)) mats.set(o.material, o); });
+  const list = [...jobs, ...mats.values()];
+  const step = () => {
+    if (stop()) return; const t0 = performance.now();
+    while (list.length && performance.now() - t0 < 40) {
+      const o = list.shift(); if (typeof o === 'function') { o(); continue; }
+      const px = o.isSprite ? new T.Sprite(o.material) : o.isPoints ? new T.Points(o.geometry, o.material) : o.isLine ? new T.Line(o.geometry, o.material) : new T.Mesh(o.geometry, o.material);
+      px.frustumCulled = false; tmp.add(px); try { r.compile(tmp, cam); r.render(tmp, cam); } catch (e) {} tmp.remove(px);
+    }
+    if (list.length) setTimeout(step, 16); else done();
+  };
+  step();
+}
 function prepRace() {
   race = {track: STRIP, state: 'idle', t: 0, cars: entries().filter(e => e.build).map(newCar)};
   const cv = $('#rc'); if (cv) cv.style.height = Math.max(190, race.cars.length * 46 + 60) + 'px';
   drawBoard(); cancelAnimationFrame(raf);
   if (!T3 || !cv) { drawRace(); raf = requestAnimationFrame(idleTick); return; }
   const r0 = race; cv.insertAdjacentHTML('afterend', '<div class="ld3"><i></i>Rolling the cars out</div>');
-  afterWipe(() => { if (race !== r0 || !cv.isConnected) return; race.cars.forEach(c => runFor(c.spec)); try { race3(race); R3.v.r.compile(R3.v.scene, R3.v.cam); race.cars.forEach(carShots); cv.parentNode.insertBefore(R3.v.r.domElement, cv); cv.style.display = 'none'; } catch (e) { cv.style.display = ''; } const l = cv.parentNode.querySelector('.ld3'); if (l) l.remove(); drawRace(); raf = requestAnimationFrame(idleTick); });
+  afterWipe(() => {
+    if (race !== r0 || !cv.isConnected) return;
+    let ok = true; try { race3(race); } catch (e) { ok = false; }
+    const show = () => { if (ok) { cv.parentNode.insertBefore(R3.v.r.domElement, cv); cv.style.display = 'none'; } const l = cv.parentNode.querySelector('.ld3'); if (l) l.remove(); drawRace(); raf = requestAnimationFrame(idleTick); };
+    if (!ok) { race.cars.forEach(c => runFor(c.spec)); return show(); }
+    // every shader the race will need is compiled behind the loader, a few at a time, so neither this tab nor the lights freeze on one
+    warmScene(R3.v.r, R3.v.scene, R3.v.cam, () => race !== r0 || !cv.isConnected, () => show(), [...race.cars.map(c => () => runFor(c.spec)), ...race.cars.map((c, i) => () => carShots(c, i))]);
+  });
 }
 function idleTick() {
   if (!race || race.state !== 'idle' || MODE !== 'org' || S.tab !== 'race' || !$('#rc') || cineOn()) return;
@@ -3225,12 +3297,19 @@ function stepRace(dt, withReplay) {
     const run = race.cars.filter(c => !c.fin);
     if (!run.length) { race.state = 'done'; race.doneAt = race.t; playSpeed = 1; SFX.engineStop(); return 'finished'; }
     const f = run.reduce((a, c) => c.pos > a.pos ? c : a); SFX.engineSet(clamp((f.rpm - 900) / (f.spec.red - 900)));
-  } else if (race.state === 'done' && race.t > race.doneAt + 2.6) {
+  } else if (race.state === 'done' && race.t > race.doneAt + 4) {
     if (!withReplay) { race.over = true; return ''; }
-    const rk = order(), w = rk[0], s2 = rk[1];
-    Object.assign(race, {state: 'replay', rp1: w.res.time + Math.min(1.4, s2 ? s2.res.time - w.res.time + .5 : .9)}); race.t = w.res.time - .9; playSpeed = .28;
+    // the replay package, each part in slow motion: the launch from behind the line, the leader passing half-way, the finish line
+    const rk = order(), w = rk[0], s2 = rk[1], away = [...rk].sort((a, b) => a.res.rt - b.res.rt)[0], half = [...rk].sort((a, b) => (a.res.rt + a.res.t200) - (b.res.rt + b.res.t200))[0], at200 = half.res.rt + half.res.t200;
+    race.rps = [
+      {from: -.3, to: 2.2, speed: .3, shot: 'rlaunch', big: 'Replay · the launch', small: `${away.team.name} first away · R/T ${away.res.rt.toFixed(3)} s`},
+      {from: at200 - 1.4, to: at200 + .8, speed: .45, shot: 'track', big: 'Replay · half-way', small: `${half.team.name} leads at 200 m · ${Math.round(half.res.v200 * 3.6)} km/h`},
+      {from: w.res.time - .9, to: w.res.time + Math.min(1.4, s2 ? s2.res.time - w.res.time + .5 : .9), speed: .28, shot: 'replay', big: 'Replay · ' + w.team.name, small: s2 ? 'Wins by ' + (s2.res.time - w.res.time).toFixed(3) + ' s' : w.res.et.toFixed(3) + ' s'}];
+    race.rpi = 0; race.state = 'replay'; race.t = race.rps[0].from; playSpeed = race.rps[0].speed;
     return 'replay';
-  } else if (race.state === 'replay' && race.t >= race.rp1) { race.over = true; playSpeed = 1; }
+  } else if (race.state === 'replay' && race.t >= race.rps[race.rpi].to) {
+    if (race.rpi + 1 < race.rps.length) { const sg = race.rps[++race.rpi]; race.t = sg.from; playSpeed = sg.speed; } else { race.over = true; playSpeed = 1; }
+  }
   return '';
 }
 function raceSound() {
@@ -3268,7 +3347,7 @@ function cineStart() {
 <div class="cgantry" id="cgantry"><div class="cgbar">${TREE_HTML}</div><div class="cgtext" id="cgtext">Lights</div></div>
 <div class="copen" id="copen"></div><div class="cintro" id="cintro"></div><div class="cbanner" id="cbanner"></div><div class="cgrid" id="cgrid"></div>
 <div class="cticker"><div>${Array(3).fill(`${esc(S.title || 'Grand Bid Prix')} · E-Cell JNTUH × Hexawatts · ${STRIP.name} · ${cars.length} cars · ` + cars.map(c => esc(c.team.name) + (c.name !== c.team.name ? ' “' + esc(c.name) + '”' : '')).join(' · ') + ' · ').join('')}</div></div>
-<div class="cfin" id="cfin"></div><button class="cskip" data-act="cineSkip">Skip <b>›››</b></button>`;
+<div class="csplits" id="csplits"></div><div class="cfin" id="cfin"></div><button class="cskip" data-act="cineSkip">Skip <b>›››</b></button>`;
   document.body.appendChild(el);
   const cv = $('#rc'), st = $('#cstage'); if (R3.v && R3.v.r.domElement.parentNode) st.appendChild(R3.v.r.domElement); st.appendChild(cv);
   cine = {lead: null, fin: {}, q: [], bannerUntil: 0, done: 0, tower: 0, crowd: 0, launched: false, rt: 0, rp: 0, el: {}, rows: null, fast: false};
@@ -3278,7 +3357,7 @@ function cineStart() {
   const OD = 6000; $('#creveal').classList.add('off');
   const ci = cine; cine.timers = cars.map((c, i) => setTimeout(() => carShots(c, i).then(sh => { if (cine !== ci) return; ci.side[i] = sh[1]; ci.hero[i] = sh[0]; if (race.state === 'walk' && race.wt < race.gridAt) cineReveal(c, i, sh[0]); }), OD + 200 + i * 2400));
   cine.timers.push(setTimeout(() => { const r = $('#creveal'); if (r) r.classList.add('off'); }, OD + 200 + cars.length * 2400 - 300));
-  cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); SFX.crowd(); SFX.music('intro');
+  cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); SFX.crowd(); bgm('intro');
 }
 // views: [[camera direction, fill, height], ...]; returns shot(car, i) → one image URL per view, and dispose()
 function revealShooter(views) {
@@ -3306,11 +3385,12 @@ const PORTRAITS = new Map();
 const carShots = (c, i) => { const k = [c.spec.key, c.color, i].join('|'); if (!PORTRAITS.has(k)) PORTRAITS.set(k, shooter().shot(c, i)); return PORTRAITS.get(k); };
 // the timeslip side views for any car whose reveal was skipped
 function cineShotsDone() { const ci = cine; if (!ci) return; race.cars.forEach((c, i) => { if (!ci.side[i]) carShots(c, i).then(sh => { ci.side[i] = sh[1]; }); }); }
-// after the last reveal: the whole field side by side on the line, every car's portrait in one row along the bottom
+// after the last reveal: the whole field side by side on the line, every car's portrait in one row along the bottom (in the
+// order the camera sees them, so each portrait sits under its car)
 function cineGrid() {
   const ci = cine, cars = race.cars, el = $('#cgrid'); ci.grid = 1; ci.timers.forEach(clearTimeout);
   const rv = $('#creveal'); if (rv) rv.classList.add('off');
-  el.innerHTML = `<div class="cgl"><small>On the grid · ${cars.length} cars</small><div class="cgcars">${cars.map((c, i) => `<div class="cgc" style="--c:${c.color};--i:${i}"><div class="cgim" data-i="${i}">${ci.hero[i] ? `<img src="${ci.hero[i]}" alt="">` : `<div class="crsil">${carSVG(c.build, c.color)}</div>`}</div><b>${esc(clip(c.team.name, 16))}</b></div>`).join('')}</div></div>`;
+  el.innerHTML = `<div class="cgl"><small>On the grid · ${cars.length} cars</small><div class="cgcars">${cars.map((c, i) => [c, i]).reverse().map(([c, i], j) => `<div class="cgc" style="--c:${c.color};--i:${j}"><div class="cgim" data-i="${i}">${ci.hero[i] ? `<img src="${ci.hero[i]}" alt="">` : `<div class="crsil">${carSVG(c.build, c.color)}</div>`}</div><b>${esc(clip(c.team.name, 16))}</b></div>`).join('')}</div></div>`;
   requestAnimationFrame(() => el.classList.add('show')); SFX.whoosh();
   cars.forEach((c, i) => { if (!ci.hero[i]) carShots(c, i).then(sh => { if (cine !== ci || !sh[0]) return; ci.hero[i] = sh[0]; const b = el.querySelector(`[data-i="${i}"]`); if (b) b.innerHTML = `<img src="${sh[0]}" alt="">`; }); });
 }
@@ -3338,31 +3418,31 @@ function cineFrame(now) {
   if (race.state === 'walk') {
     const dt = Math.min(.1, (now - race.last) / 1000); race.last = now; race.wt += dt;
     if (race.wt >= race.gridAt && !cine.grid) cineGrid();
-    if (race.wt >= race.wd) { cine.timers.forEach(clearTimeout); cineShotsDone(); cine.q = []; const rv = $('#creveal'); if (rv) rv.classList.add('off'); $('#cgrid').classList.remove('show'); $('#cgtext').textContent = 'Lights'; startRace(); SFX.music('lights'); }
+    if (race.wt >= race.wd) { cine.timers.forEach(clearTimeout); cineShotsDone(); cine.q = []; const rv = $('#creveal'); if (rv) rv.classList.add('off'); $('#cgrid').classList.remove('show'); $('#cgtext').textContent = 'Lights'; startRace(); bgm('lights'); }
   }
   if (now - cine.crowd > 4500 && race.state !== 'replay' && !race.over) { cine.crowd = now; SFX.crowd(); }
   if (g) {
     if (race.state === 'lights') { g.classList.add('show'); setTree(bar, race.lt); const tx = race.lt < LIGHT_GAP * 5 ? 'Lights' : 'Hold…', te = $('#cgtext'); if (te.textContent !== tx) te.textContent = tx; }
-    else if (race.state === 'run' && !cine.launched) { cine.launched = true; $('#cine').classList.add('running'); setTree(bar, TREE_GO); g.classList.add('out'); $('#cgtext').textContent = 'Green'; $('#csmoke').classList.add('go'); SFX.cheer(); SFX.music('race'); setTimeout(() => g.classList.remove('show', 'out'), 2600); }
+    else if (race.state === 'run' && !cine.launched) { cine.launched = true; $('#cine').classList.add('running'); setTree(bar, TREE_GO); g.classList.add('out'); $('#cgtext').textContent = 'Green'; $('#csmoke').classList.add('go'); SFX.cheer(); bgm('race'); setTimeout(() => g.classList.remove('show', 'out'), 2600); }
     else if (race.state === 'walk') g.classList.remove('show');   // the cars have the screen to themselves
   }
   if (race.state === 'run' || race.state === 'done' || race.state === 'replay') {
     const rk = ranked(), L = rk[0], run = cars.filter(c => !c.fin), F = run.length ? run.reduce((a, c) => c.pos > a.pos ? c : a) : L, rp = race.state === 'replay';
     const set = (id, val) => { const e = cine.el[id] || (cine.el[id] = $('#' + id)), t = String(val); if (e && e.textContent !== t) e.textContent = t; };
     set('cclock', rp ? 'Replay' : (race.state === 'run' ? Math.max(0, race.t) : order()[cars.length - 1].res.time).toFixed(3));
-    set('clapc', rp ? 'Slow motion · finish line' : race.state === 'done' ? '400 m · all across' : `${Math.round(Math.min(QM, F.pos))} / 400 m`);
+    set('clapc', rp ? 'Slow-motion replay' : race.state === 'done' ? '400 m · all across' : `${Math.round(Math.min(QM, F.pos))} / 400 m`);
     if (F) { set('cspd', Math.round(F.v * 3.6)); set('cgear', F.fin ? 'FIN' : F.gear); set('cwho', F.team.name); const fast = !rp && F.v > 58; if (cine.fast !== fast) { cine.fast = fast; $('#cine').classList.toggle('fast', fast); } }
     if (race.state === 'run') {
       if (L && !L.fin && cine.lead && cine.lead !== L.team.id && race.t > 1.2) cineBanner('P1 · ' + L.team.name, 'Takes the lead', 'lead');
       if (L && !L.fin) cine.lead = L.team.id;
-      if (!cine.rt && cars.length > 1 && race.t > Math.max(...cars.map(c => c.res.rt)) + .15) { cine.rt = 1; const b = [...cars].sort((a, z) => a.res.rt - z.res.rt)[0]; cineBanner('Best reaction · ' + b.team.name, 'R/T ' + b.res.rt.toFixed(3) + ' s', 'fast'); }
+      if (!cine.rt && cars.length > 1 && race.t > Math.max(...cars.map(c => c.res.rt)) + .15) { cine.rt = 1; const b = [...cars].sort((a, z) => a.res.rt - z.res.rt)[0]; cineBanner('Quickest off the line · ' + b.team.name, 'R/T ' + b.res.rt.toFixed(3) + ' s', 'fast'); }
       cars.forEach(c => {
         if (!c.fin || cine.fin[c.team.id]) return; cine.fin[c.team.id] = 1; const p = order().indexOf(c) + 1, w = order()[0];
         if (p === 1) { const hole = cars.some(o => o !== c && o.res.et < c.res.et); cineBanner('P1 · ' + c.team.name, `${hole ? 'Holeshot win · ' : ''}${c.res.et.toFixed(3)} s @ ${Math.round(c.res.trap * 3.6)} km/h`, 'win'); flash(c.color); confetti(c.color); }
         else if (p <= 3) cineBanner('P' + p + ' · ' + c.team.name, '+' + (c.res.time - w.res.time).toFixed(3) + ' s · ' + c.res.et.toFixed(3) + ' s', '');
       });
     }
-    if (rp && !cine.rp) { cine.rp = 1; SFX.music('intro'); cine.q = []; cine.bannerUntil = 0; const o = order(); cineBanner('Replay · ' + o[0].team.name, o[1] ? 'Wins by ' + (o[1].res.time - o[0].res.time).toFixed(3) + ' s' : o[0].res.et.toFixed(3) + ' s', 'final'); }
+    if (rp && cine.rp !== race.rpi + 1) { if (!cine.rp) bgm('intro'); cine.rp = race.rpi + 1; cine.q = []; cine.bannerUntil = 0; const sg = race.rps[race.rpi]; cineBanner(sg.big, sg.small, 'final'); }
     if (!rp && now - cine.tower > 120) {
       cine.tower = now; const lf = rk[0] && rk[0].fin, tw = $('#ctower');
       if (!cine.rows) { cine.rows = {}; cine.step = window.innerWidth <= 640 ? 31 : 36; tw.textContent = ''; tw.style.height = cars.length * cine.step + 'px'; cars.forEach(c => { const el = document.createElement('div'); el.className = 'ctr'; el.style.setProperty('--c', c.color); el.innerHTML = `<b></b>${badge(c.team, 18)}<span>${esc(clip(c.team.name, 16))}</span><em></em>`; tw.appendChild(el); cine.rows[c.team.id] = {el, b: el.querySelector('b'), em: el.querySelector('em'), i: -1, t: ''}; }); }
@@ -3372,7 +3452,7 @@ function cineFrame(now) {
         if (r.t !== t) { r.t = t; r.em.textContent = t; }
       });
     }
-    if (race.over && !cine.done) { cine.done = now; setTimeout(cineFinish, 700); }
+    if (race.over && !cine.done) { cine.done = now; setTimeout(cineSplits, 500); }
   }
   if (cine.q.length && now > cine.bannerUntil) { const b = cine.q.shift(), el = $('#cbanner'); cine.bannerUntil = now + (cine.q.length ? 1300 : 2600); el.innerHTML = `<div class="cbn ${b.cls}"><b>${esc(b.big)}</b><small>${esc(b.small)}</small></div>`; if (b.cls !== 'go') SFX.whoosh(); if (b.cls) SFX.cheer(); }
   else if (!cine.q.length && now > cine.bannerUntil && $('#cbanner').innerHTML) $('#cbanner').innerHTML = '';
@@ -3417,8 +3497,18 @@ function fireworks(cols, dur, lvl) {
   };
   requestAnimationFrame(frame);
 }
+// after the replays: every car's splits side by side, the bars filling in and the best in each column lit, then the timeslips
+function cineSplits() {
+  if (!cineOn() || cine.fin2) return;
+  const rk = order(), el = $('#csplits'), lo = k => Math.min(...rk.map(c => c.res[k])), hi = k => Math.max(...rk.map(c => c.res[k]));
+  const cell = (c, k, up) => { const v = c.res[k], b = up ? hi(k) : lo(k), w = up ? v / b : b / v; return `<span class="cspc${v === b ? ' best' : ''}"><i style="--w:${(w * 100).toFixed(1)}%"></i><b>${up ? Math.round(v * 3.6) + ' km/h' : v.toFixed(3)}</b></span>`; };
+  el.innerHTML = `<div class="csp"><div class="csph"><small>${esc(S.title || 'Grand Bid Prix')}${grpName() ? ' · ' + esc(grpName()) : ''} · the splits</small><b>Where it was won</b></div>
+<div class="csprow csphead"><span></span><span>60 ft</span><span>200 m</span><span>E.T.</span><span>Trap</span></div>
+${rk.map((c, i) => `<div class="csprow" style="--c:${c.color};--i:${i}"><span class="cspn">${badge(c.team, 22)}<em>${esc(clip(c.team.name, 18))}</em></span>${cell(c, 't60')}${cell(c, 't200')}${cell(c, 'et')}${cell(c, 'trap', true)}</div>`).join('')}</div>`;
+  cine.splits = 1; requestAnimationFrame(() => el.classList.add('show')); SFX.whoosh(); cine.splitT = setTimeout(cineFinish, 8000);
+}
 function cineFinish() {
-  if (!cineOn()) return;
+  if (!cineOn() || cine.fin2) return; cine.fin2 = 1; clearTimeout(cine.splitT);
   const rk = order(), w = rk[0], hole = rk.some(o => o !== w && o.res.et < w.res.et), pos = []; rk.forEach((c, i) => { pos[i] = i && tied(c, rk[i - 1]) ? pos[i - 1] : i + 1; });
   const title = esc(S.title || 'Grand Bid Prix'), side = (cine.side || []);
   const row = (c, i) => `<div class="crr" style="--c:${c.color};--i:${i}"><div class="crpos">${pos[i]}</div>
@@ -3428,17 +3518,30 @@ function cineFinish() {
   const html = `<div class="cres"><div class="crhead"><h1 class="crt"><span style="--i:0">Time</span><span class="r" style="--i:1">slips</span></h1><div class="crsub">${rk.length} cars · ${grpName() ? esc(grpName()) + ' · ' : ''}400 m · ${title} · E-Cell JNTUH × Hexawatts</div><div class="crbar"><u></u></div></div>
 <div class="crrows">${rk.map(row).join('')}</div>
 <button class="in-btn go" data-act="cineClose" style="--i:${rk.length}"><span>Back to the pit wall</span><b><i>›</i><i>›</i><i>›</i></b></button></div>`;
-  wipe(() => { if (!cineOn()) return; SFX.music('finale'); $('#cfin').innerHTML = html; $('#cfin').classList.add('show'); $('#cine').classList.add('ended'); fireworks([w.color, '#f3ece0', '#e23a2e', '#a8d0e2', '#3a7aa3'], 30, 3); });
+  wipe(() => { if (!cineOn()) return; bgm('finale'); $('#csplits').classList.remove('show'); $('#cfin').innerHTML = html; $('#cfin').classList.add('show'); $('#cine').classList.add('ended'); fireworks([w.color, '#f3ece0', '#e23a2e', '#a8d0e2', '#3a7aa3'], 30, 3); });
 }
-function cineClose() { const el = $('#cine'); if (el) el.remove(); cine = null; playSpeed = 1; SFX.engineStop(); SFX.tyresStop(); SFX.musicStop(); render(); }
+/* ---- race music: a song the host picks from this laptop plays during the race broadcast instead of the built-in track. It is
+   kept in this browser (IndexedDB) so it survives a reload, and never leaves the laptop ---- */
+let SONG = null;
+const songDB = fn => { try { const q = indexedDB.open('agp-media', 1); q.onupgradeneeded = () => q.result.createObjectStore('m'); q.onsuccess = () => { try { fn(q.result.transaction('m', 'readwrite').objectStore('m')); } catch (e) {} }; } catch (e) {} };
+const songSet = (blob, name) => { if (SONG) { if (SONG.el) SONG.el.pause(); URL.revokeObjectURL(SONG.url); } SONG = blob ? {name, url: URL.createObjectURL(blob), el: null} : null; };
+const songLoad = () => songDB(st => { const r = st.get('song'); r.onsuccess = () => { const v = r.result; if (!v || !v.blob) return; songSet(v.blob, v.name); const e = $('#songname'), b = $('#songclr'); if (e) e.textContent = v.name; if (b) b.hidden = false; }; });
+// its volume follows the broadcast: quieter under the lights, full from the green, faded out on the way out
+function songFade(to, ms = 600) { const a = SONG && SONG.el; if (!a) return; clearInterval(a._f); const from = a.volume, t0 = performance.now(); a._f = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); a.volume = from + (to - from) * k; if (k >= 1) { clearInterval(a._f); if (!to) a.pause(); } }, 40); }
+function songPlay(vol) { if (!SONG.el) { SONG.el = new Audio(SONG.url); SONG.el.loop = true; } const a = SONG.el; a.muted = SFX.muted(); if (a.paused) { a.currentTime = 0; a.volume = 0; a.play().catch(() => {}); } songFade(vol); }
+// the broadcast's soundtrack: the host's song when one is picked, otherwise the built-in track
+const bgm = sec => { if (SONG) songPlay(sec === 'lights' ? .35 : sec === 'race' || sec === 'finale' ? 1 : .7); else SFX.music(sec); };
+const bgmStop = () => { if (SONG && SONG.el && !SONG.el.paused) songFade(0, 1200); SFX.musicStop(); };
+function cineClose() { const el = $('#cine'); if (el) el.remove(); cine = null; playSpeed = 1; SFX.engineStop(); SFX.tyresStop(); bgmStop(); render(); }
 function cineSkip() {
   if (!cineOn()) return;
   if (race.state === 'open') { race.ot = race.od; }
   else if (race.state === 'walk') { race.wt = race.wt < race.gridAt ? race.gridAt : race.wd; const rv = $('#creveal'); if (rv) rv.classList.add('off'); }
   else if (race.state === 'lights') { race.lt = TREE_GO; }
   else if (race.state === 'run') { playSpeed = Math.max(playSpeed, 3); }
-  else if (race.state === 'done') { race.t = race.doneAt + 2.6; }
-  else if (race.state === 'replay' && !race.over) { race.t = race.rp1; }
+  else if (race.state === 'done') { race.t = race.doneAt + 4; }
+  else if (race.state === 'replay' && !race.over) { race.rpi = race.rps.length - 1; race.t = race.rps[race.rpi].to; }
+  else if (race.over && cine.splits && !cine.fin2) cineFinish();
   else if (race.over && !cine.done) return;
   else cineClose();
 }
@@ -3624,7 +3727,7 @@ function shakedown() {
   setTimeout(() => {
     if (race !== r0 || !cv.isConnected) return;
     if (T3) { try { race3(race); R3.v.r.compile(R3.v.scene, R3.v.cam); cv.parentNode.insertBefore(R3.v.r.domElement, cv); cv.style.display = 'none'; } catch (e) { cv.style.display = ''; } const l = cv.parentNode.querySelector('.ld3'); if (l) l.remove(); }
-    drawRace(); armTree(); Object.assign(race, {t: 0, lt: 0, ln: 0, state: 'lights', last: performance.now(), lb: 0, over: false});
+    drawRace(); armTree(true); Object.assign(race, {t: 0, lt: 0, ln: 0, state: 'lights', last: performance.now(), lb: 0, over: false});
     setTree($('#lights'), 0); raf = requestAnimationFrame(tickShk);
   }, 60);
 }
@@ -3675,23 +3778,31 @@ const ACT = {
   bid: el => {
     const id = el.dataset.team, t = team(id), me = block.pick && block.pick.team === id;
     if (!me && left(id) < block.price) return toast(`${t.name} cannot afford ${fmt(block.price)} credits`, true);
-    block.hist.push(block.pick); block.pick = me ? null : {team: id, price: block.price}; if (!me) SFX.hit();
+    block.hist.push({pick: block.pick, price: block.price, n: block.steps.length}); block.pick = me ? null : {team: id, price: block.price}; if (!me) SFX.hit();
     drawBlock();
   },
-  nextLot: () => { const n = block && nextLot(block.part); if (!n) return closeOverlay(); S.cat = PARTS[n].cat; lotsOpen = true; save(); render(); openBlock(n); },
-  undoBid: () => { if (block.hist.length) { block.pick = block.hist.pop(); drawBlock(); } },
-  lotTime: () => { if (!block) return; if (!block.t0) block.t0 = performance.now(); else block.dur = Math.max(block.dur, (performance.now() - block.t0) / 1000) + 15; block.rang = false; const e = $('#ltimer'); if (e) { e.textContent = lotTxt(lotLeft()); e.classList.remove('up', 'low'); } },
+  nextLot: () => { const n = block && nextLot(block.part); if (!n) return closeOverlay(); S.cat = PARTS[n].cat; lotsOpen = true; boardStale = true; save(); openBlock(n); },
+  undoBid: () => { const h = block.hist.pop(); if (h) { block.pick = h.pick; block.price = h.price; block.steps.length = h.n; drawBlock(); } },
+  // + beside a team: that team bids. The first bid takes the lot at the price on the clock; each one after adds a step.
+  raiseBid: el => {
+    const id = el.dataset.team, t = team(id), pk = block.pick; if (pk && pk.team === id) return;
+    const amt = pk ? block.price + raiseFor(block.price) : block.price;
+    if (left(id) < amt) return toast(`${t.name} cannot afford ${fmt(amt)} credits`, true);
+    block.hist.push({pick: pk, price: block.price, n: block.steps.length}); if (pk) { block.steps.push(block.price); block.price = amt; }
+    block.pick = {team: id, price: amt}; bump = true; SFX.bid(block.steps.length + 1); drawBlock();
+  },
+  lotTime: () => { if (!block) return; if (!block.t0) block.t0 = performance.now(); else block.dur = Math.max(block.dur, (performance.now() - block.t0) / 1000) + 15; SFX.music('auction'); block.rang = false; const e = $('#ltimer'); if (e) { e.textContent = lotTxt(lotLeft()); e.classList.remove('up', 'low'); } },
   sold: () => {
-    const k = block && block.pick; if (!k) return;
+    const k = block && block.pick; if (!k) return; SFX.musicStop();
     const P = PARTS[block.part], t = team(k.team), xv = $('#blk-x .xv');
     S.sales[P.id] = {team: t.id, price: k.price}; block.pick = null; block.hist = []; save();
     if (V3CFG.stage) V3CFG.stage = Object.assign({}, V3CFG.stage, {color: t.color, explode: false, xray: true, hi: {[P.cat]: t.color}});
     toast('', false, `${badge(t, 40)}<span class="sb">Sold</span><span class="st">${esc(t.name)}<small>takes it for <b>${fmt(k.price)} credits</b></small></span>`);
-    render(); drawBlock(true);
+    boardStale = true; drawBlock(true);
     if (xv) { xv.classList.remove('ex'); xv.classList.add('keep'); xv.querySelectorAll('.on').forEach(g => g.style.setProperty('--hc', t.color)); }
     flash(t.color); confetti(t.color); document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 520);
   },
-  revoke: () => { const id = block.part; delete S.sales[id]; save(); render(); openBlock(id); },
+  revoke: () => { const id = block.part; delete S.sales[id]; save(); boardStale = true; openBlock(id); },
   addTeam: () => {
     const t = newTeam(S.teams.length), late = Object.keys(S.sales).length; S.teams.push(t); retune(); save(); render();
     if (late) toast(`${t.name} joins late: they can bid on whatever is still unsold`);
@@ -3721,6 +3832,7 @@ const ACT = {
   copyLink: el => copy(linkFor(team(el.dataset.id)), hosted() ? 'Link copied' : 'Link copied (works on this computer until the app is hosted)'),
   preview: el => window.open(linkFor(team(el.dataset.id)), '_blank'),
   start: () => cineStart(),
+  songClear: () => { songSet(null); songDB(st => st.delete('song')); const e = $('#songname'), b = $('#songclr'); if (e) e.textContent = 'Built-in soundtrack'; if (b) b.hidden = true; },
   copyResult: () => S.last ? copy(resultCode(), 'Result code copied') : toast('Run the race first', true),
   combine: () => addResults($('#combo').value),
   comboShow: () => showOverlay(`<div class="eyebrow">${esc(S.title || 'Grand Bid Prix')} · combined results</div><h2 style="font-family:var(--disp);font-size:26px;margin:6px 0 14px;text-transform:uppercase">Leaderboard</h2>${comboHTML()}`, 'wide'),
@@ -3742,7 +3854,7 @@ const ACT = {
   },
   testLap: () => { if (!GS.opened) return; shakedown(); },
   xview: () => { showX = !showX; xAnim = showX; render(); },
-  mute: () => { SFX.toggle(); const b = $('.mutebtn'); if (b) b.outerHTML = muteBtn(); SFX.click(); },
+  mute: () => { SFX.toggle(); if (SONG && SONG.el) SONG.el.muted = SFX.muted(); const b = $('.mutebtn'); if (b) b.outerHTML = muteBtn(); SFX.click(); },
   intro: () => intro(true),
   emblem: el => { const t = team(el.dataset.id); t.em = ((+t.em || 0) + 1) % EMB.length; save(); el.innerHTML = badge(t, 40); },
   ruleNext: () => fling(-1),
@@ -3760,10 +3872,10 @@ const ACT = {
 };
 const INP = {
   title: el => { S.title = el.value; save(); const b = $('.brand b'); if (b) b.textContent = S.title; },
-  budget: el => { S.budget = Math.max(0, Math.round(+el.value || 0)); reprice(S.budget); retune(); save(); const d = $('#deck'); if (d) d.innerHTML = deckHTML(); aestUpd(); },
-  step: el => { S.step = Math.max(1, Math.round(+el.value || 1)); retune(); save(); const d = $('#deck'); if (d) d.innerHTML = deckHTML(); aestUpd(); },
-  cap: el => { if (!el.value) return; S.cap = clamp(Math.round(+el.value), 5, 120); retune(); save(); const d = $('#deck'); if (d) d.innerHTML = deckHTML(); aestUpd(); },
+  budget: el => { S.budget = Math.max(0, Math.round(+el.value || 0)); reprice(S.budget); retune(); save(); const d = $('#deck'); if (d) d.innerHTML = deckHTML(); },
+  step: el => { S.step = Math.max(1, Math.round(+el.value || 1)); retune(); save(); const d = $('#deck'); if (d) d.innerHTML = deckHTML(); },
   group: el => { S.group = el.value.trim().slice(0, 12); save(); },
+  song: el => { const f = el.files && el.files[0]; if (!f) return; songSet(f, f.name); songDB(st => st.put({blob: f, name: f.name}, 'song')); const e = $('#songname'), b = $('#songclr'); if (e) e.textContent = f.name; if (b) b.hidden = false; toast('Race music: ' + f.name); },
   tname: el => { team(el.dataset.id).name = el.value.trim() || 'Team'; save(); },
   tcolor: el => { team(el.dataset.id).color = el.value; save(); },
   next: el => { if (block && el.value) block.price = Math.max(PARTS[block.part].price, Math.round(+el.value || 0)); },
@@ -3771,7 +3883,7 @@ const INP = {
   car: el => { GS.car = el.value; store(gkey(), GS); const b = $('.gbar .sum b'); if (b) b.textContent = GS.car.trim() || PKG.team.name; },
   livery: el => { GS.livery = el.value; store(gkey(), GS); const bay = $('.bay'); if (bay) bay.style.setProperty('--c', el.value); if (V3CFG.garage) { V3CFG.garage = Object.assign({}, V3CFG.garage, {color: el.value}); const v = VIEWS.garage; if (v) v.set(V3CFG.garage); } },
 };
-const SND = {flip: 'flip', tab: 'whoosh', cat: '', toFolders: '', open: 'whoosh', xview: 'whoosh', sold: 'gavel', openCrate: 'crate', undoBid: 'undo', nudge: '', nextLot: 'whoosh', bid: '', lotTime: 'tick', copyResult: '', combine: '', comboShow: 'whoosh', comboClear: 'tick', install: '', start: '', mute: '', emblem: 'tick', ruleNext: '', rulePrev: '', host: 'tick', lock: '', testLap: 'whoosh', enterGarage: '', cineSkip: 'tick', cineClose: 'whoosh'};
+const SND = {flip: 'flip', tab: 'whoosh', cat: '', toFolders: '', open: 'whoosh', xview: 'whoosh', sold: 'gavel', openCrate: 'crate', undoBid: 'undo', nudge: '', raiseBid: '', nextLot: 'whoosh', bid: '', lotTime: 'tick', copyResult: '', combine: '', comboShow: 'whoosh', comboClear: 'tick', install: '', start: '', mute: '', emblem: 'tick', ruleNext: '', rulePrev: '', host: 'tick', lock: '', testLap: 'whoosh', enterGarage: '', cineSkip: 'tick', cineClose: 'whoosh'};
 document.addEventListener('pointerdown', () => SFX.unlock(), true);
 document.addEventListener('keydown', () => SFX.unlock(), true);
 document.addEventListener('click', e => {
@@ -3844,7 +3956,7 @@ function resumePrompt() {
   let imported = null; S.tab = 'setup'; S.track = 'drag';
   try { history.scrollRestoration = 'manual'; } catch (e) {}
   if (h.startsWith('#build=')) { imported = importCodes(h.slice(7)); S.tab = 'race'; history.replaceState(null, '', location.pathname + location.search); }
-  save(); render(); intro(); load3D(); resumePrompt(); syncStart();
+  save(); render(); intro(); load3D(); resumePrompt(); syncStart(); songLoad();
   if (imported) reportImport(imported);
   if (h.startsWith('#pkg=')) toast('That package link could not be read', true);
 })();
