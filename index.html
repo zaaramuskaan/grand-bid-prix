@@ -2950,8 +2950,7 @@ function render() {
 let ruleI = 0, hostOpen = false, rdrag = null;
 const rules = () => [
   [fmt(S.budget) + ' credits', 'Your war chest.', 'Every team starts with the same budget. Spend it or lose it: nothing carries over to the race.'],
-  S.raise ? ['+' + S.raise + '%', 'The clock climbs fast.', `The price on the block goes up at least ${S.raise}% a step, never less than ${fmt(S.step)} credits. Keep your paddle up while you still want the part.`]
-    : ['+' + fmt(S.step), `The clock climbs in ${fmt(S.step)}s.`, `The price on the block goes up ${fmt(S.step)} credits a step. Keep your paddle up while you still want the part.`],
+  ['+50 / +100', 'How bids climb.', 'Each raise adds 50 credits until the price reaches 1,000, then 100 credits a time after that. Raise your hand to bid.'],
   ['24', 'Parts. One of each.', 'Four categories, six parts in each. When the hammer drops, that part is gone for good.'],
   ['4', 'Free parts. No excuses.', 'Everyone gets a basic engine, exhaust, gearbox and body. Lose every bid and you still race.'],
   ['SOLD', 'Last paddle standing.', `Be the last paddle up and the part is yours at the price on the clock. No take-backs, no refunds, no sulking.`],
@@ -2980,7 +2979,7 @@ function viewSetup() {
 <div class="panel"><h2>Event</h2>
 <label class="field"><span>Event name</span><input class="inp" data-in="title" value="${esc(S.title)}" maxlength="40"></label>
 <div class="frow"><label class="field"><span>Budget per team (credits)</span><input class="inp" type="number" min="1000" step="500" data-in="budget" value="${S.budget}"></label>
-<label class="field"><span>Smallest clock step (credits)</span><input class="inp" type="number" min="1" step="10" data-in="step" value="${S.step}"></label></div>
+</div>
 <label class="field"><span>Group name</span><input class="inp" data-in="group" value="${esc(S.group || '')}" maxlength="12" placeholder="e.g. A"></label>
 <div class="field"><span>Race music</span><div class="songrow"><label class="btn ghost sm">Choose a song<input type="file" accept="audio/*" data-in="song" hidden></label><b id="songname">${SONG ? esc(SONG.name) : 'Built-in soundtrack'}</b><button class="btn ghost sm" data-act="songClear" id="songclr" ${SONG ? '' : 'hidden'}>Remove</button></div></div>
 <div class="btnrow"><button class="btn" data-act="mock">Run a mock auction</button><button class="btn ghost" data-act="clearSales">Clear auction results</button><button class="btn ghost" data-act="resetAll">Reset everything</button><button class="btn ghost" data-act="intro">Replay intro</button></div>
@@ -3083,7 +3082,8 @@ function auctionMinutes() {
 const capMin = () => Math.min(35, 14 + S.teams.length);
 function retune() { if (Object.keys(S.sales).length) return; for (S.raise = 10; S.raise < 40 && auctionMinutes() > capMin(); S.raise++); }
 // the smallest raise allowed on a bid, rounded up to the minimum step
-const raiseFor = bid => Math.max(S.step, Math.ceil(bid * (S.raise || 0) / 100 / S.step) * S.step);
+// every raise: 50 credits while the price is under 1,000, then 100 credits a time
+const raiseFor = bid => bid < 1000 ? 50 : 100;
 // the next unsold lot in board order (category by category, cheapest first) after the one on the block
 const LOTS = () => CATS.flatMap(c => BYCAT[c.id].slice(1));
 function nextLot(id) { const L = LOTS(), i = L.findIndex(p => p.id === id); for (let k = 1; k <= L.length; k++) { const p = L[(i + k) % L.length]; if (!S.sales[p.id]) return p.id; } return null; }
